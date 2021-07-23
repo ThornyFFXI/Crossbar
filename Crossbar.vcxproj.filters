@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="input">
+      <UniqueIdentifier>{8c614d42-0005-4ddc-b238-abd683e90674}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="input\Header Files">
+      <UniqueIdentifier>{461945cd-b499-46d4-9521-525d8c91bfc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="input\Source Files">
+      <UniqueIdentifier>{7ad9ade4-791a-4590-92d0-91df89f98fd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="macros">
+      <UniqueIdentifier>{f8721533-4d01-4ab5-bdb1-a876e10fd12f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="macros\Header Files">
+      <UniqueIdentifier>{9daa961f-94a1-49ff-af35-67747fd4210e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="macros\Source Files">
+      <UniqueIdentifier>{87371e56-c79a-49c4-9fd9-831e18dcf834}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="display">
+      <UniqueIdentifier>{7398d901-31e2-4e6f-84a7-b10ff577d4bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="display\Header Files">
+      <UniqueIdentifier>{d0a340cb-846b-4895-8cfa-0f61d370696b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="display\Source Files">
+      <UniqueIdentifier>{8dd290d7-3621-443d-8264-7b923d373860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config">
+      <UniqueIdentifier>{ad5fd23f-89b5-4fd6-95f9-904609a49c54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config\Header Files">
+      <UniqueIdentifier>{1a0920d3-e907-49a7-bd75-564e0af9c956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config\Source Files">
+      <UniqueIdentifier>{26b3eecc-754e-4173-ad98-55762c029c74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="menu">
+      <UniqueIdentifier>{d9c5f8d1-9d4d-40cd-8190-524d97007244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="menu\Header Files">
+      <UniqueIdentifier>{119ca2fe-60dd-4ebe-9ee5-dcabae1d0a2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="menu\Source Files">
+      <UniqueIdentifier>{44f6eea5-7022-4b96-afdf-0481e2599d97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="plugin">
+      <UniqueIdentifier>{ada08518-e1f7-494d-ae49-bf68d573b2e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="plugin\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="plugin\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="skillchain">
+      <UniqueIdentifier>{ed8b2e91-0649-4dcc-a1eb-03eeb84b8376}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>plugin\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input\CrossbarDirectInput.cpp">
+      <Filter>input\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input\CrossbarXInput.cpp">
+      <Filter>input\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="macros\CrossbarAbilityMacro.cpp">
+      <Filter>macros\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="macros\CrossbarCommandMacro.cpp">
+      <Filter>macros\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="macros\CrossbarEmptyMacro.cpp">
+      <Filter>macros\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="macros\CrossbarItemMacro.cpp">
+      <Filter>macros\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="macros\CrossbarMacro.cpp">
+      <Filter>macros\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="macros\CrossbarSpellMacro.cpp">
+      <Filter>macros\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="display\CrossbarCanvas.cpp">
+      <Filter>display\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="display\CrossbarMacroSet.cpp">
+      <Filter>display\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="display\GdiDIB.cpp">
+      <Filter>display\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="config\CrossbarSettings.cpp">
+      <Filter>config\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="config\CrossbarBindings.cpp">
+      <Filter>config\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="macros\CrossbarWeaponskillMacro.cpp">
+      <Filter>macros\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\FontMenuBase.cpp">
+      <Filter>menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\FontMenuUI.cpp">
+      <Filter>menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\CrossbarMainMenu.cpp">
+      <Filter>menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\CrossbarAddPalette.cpp">
+      <Filter>menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\CrossbarBindButton.cpp">
+      <Filter>menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\CrossbarSelectBindButton.cpp">
+      <Filter>menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\CrossbarSelectBindAction.cpp">
+      <Filter>menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\CrossbarSelectBindType.cpp">
+      <Filter>menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\CrossbarSelectBindFlags.cpp">
+      <Filter>menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\CrossbarManagePalettes.cpp">
+      <Filter>menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input\InputHandler.cpp">
+      <Filter>input\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\CrossbarConfirmRemoval.cpp">
+      <Filter>menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\CrossbarEditPalette.cpp">
+      <Filter>menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="skillchain\ResonationTracker.cpp">
+      <Filter>skillchain</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Crossbar.h">
+      <Filter>plugin\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Defines.h">
+      <Filter>plugin\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input\CrossbarDirectInput.h">
+      <Filter>input\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input\CrossbarXInput.h">
+      <Filter>input\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="macros\CrossbarAbilityMacro.h">
+      <Filter>macros\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="macros\CrossbarCommandMacro.h">
+      <Filter>macros\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="macros\CrossbarEmptyMacro.h">
+      <Filter>macros\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="macros\CrossbarItemMacro.h">
+      <Filter>macros\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="macros\CrossbarMacro.h">
+      <Filter>macros\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="macros\CrossbarSpellMacro.h">
+      <Filter>macros\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="macros\CrossbarWeaponskillMacro.h">
+      <Filter>macros\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="display\CrossbarCanvas.h">
+      <Filter>display\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="display\CrossbarMacroSet.h">
+      <Filter>display\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="display\GdiDIB.h">
+      <Filter>display\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="config\CrossbarBindings.h">
+      <Filter>config\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="config\CrossbarSettings.h">
+      <Filter>config\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\CrossbarAddPalette.h">
+      <Filter>menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\CrossbarConfirmRemoval.h">
+      <Filter>menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\CrossbarBindButton.h">
+      <Filter>menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\CrossbarMainMenu.h">
+      <Filter>menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\CrossbarEditPalette.h">
+      <Filter>menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\CrossbarSelectBindAction.h">
+      <Filter>menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\CrossbarSelectBindButton.h">
+      <Filter>menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\CrossbarSelectBindFlags.h">
+      <Filter>menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\CrossbarSelectBindType.h">
+      <Filter>menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\FontMenuBase.h">
+      <Filter>menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\FontMenuUI.h">
+      <Filter>menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\FontMenuDefines.h">
+      <Filter>menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\CrossbarManagePalettes.h">
+      <Filter>menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input\InputHandler.h">
+      <Filter>input\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="skillchain\ResonationTracker.h">
+      <Filter>skillchain</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="exports.def">
+      <Filter>plugin\Source Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>
