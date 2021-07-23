@@ -1,42 +1,5 @@
 #include "GdiDIB.h"
 
-#define SAVE_TO_HD
-
-#ifdef SAVE_TO_HD
-
-int GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
-{
-    UINT  num = 0;          // number of image encoders
-    UINT  size = 0;         // size of the image encoder array in bytes
-
-    Gdiplus::ImageCodecInfo* pImageCodecInfo = NULL;
-
-    Gdiplus::GetImageEncodersSize(&num, &size);
-    if (size == 0)
-        return -1;  // Failure
-
-    pImageCodecInfo = (Gdiplus::ImageCodecInfo*)(malloc(size));
-    if (pImageCodecInfo == NULL)
-        return -1;  // Failure
-
-    Gdiplus::GetImageEncoders(num, size, pImageCodecInfo);
-
-    for (UINT j = 0; j < num; ++j)
-    {
-        if (wcscmp(pImageCodecInfo[j].MimeType, format) == 0)
-        {
-            *pClsid = pImageCodecInfo[j].Clsid;
-            free(pImageCodecInfo);
-            return j;  // Success
-        }
-    }
-
-    free(pImageCodecInfo);
-    return -1;  // Failure
-}
-
-#endif
-
 GdiDIB::GdiDIB(IDirect3DDevice8* pDevice, int width, int height)
     : pDevice(pDevice)
 {
@@ -68,12 +31,6 @@ GdiDIB::~GdiDIB()
 
 void GdiDIB::ApplyToPrimitiveObject(IPrimitiveObject* pPrimitiveObject)
 {
-#ifdef SAVE_TO_HD
-    CLSID pngClsid;
-    GetEncoderClsid(L"image/png", &pngClsid);
-    this->pBitmap->Save(L"C:\\crossbartest.png", &pngClsid, NULL);
-#endif
-
     IDirect3DTexture8* texture = nullptr;
     ::D3DXCreateTexture(pDevice, mWidth, mHeight, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &texture);
 
@@ -108,29 +65,6 @@ void GdiDIB::ApplySectionToPrimitive(IPrimitiveObject* pPrimitiveObject, int off
         GetRegionPixels((uint8_t*)rect.pBits, offsetX, offsetY, width, height);
     }
     texture->UnlockRect(0);
-
-#ifdef SAVE_TO_HD
-    void* pPixels;
-    BITMAPV4HEADER bmp = { sizeof(BITMAPV4HEADER) };
-    bmp.bV4Width = width;
-    bmp.bV4Height = height;
-    bmp.bV4Planes = 1;
-    bmp.bV4BitCount = 32;
-    bmp.bV4V4Compression = BI_BITFIELDS;
-    bmp.bV4RedMask = 0x00FF0000;
-    bmp.bV4GreenMask = 0x0000FF00;
-    bmp.bV4BlueMask = 0x000000FF;
-    bmp.bV4AlphaMask = 0xFF000000;
-    HBITMAP pBmp = ::CreateDIBSection(nullptr, (BITMAPINFO*)&bmp, DIB_RGB_COLORS, &pPixels, nullptr, 0);
-    Gdiplus::Bitmap* pRaw = new Gdiplus::Bitmap(width, height, width * 4, PixelFormat32bppARGB, (BYTE*)pPixels);
-    GetRegionPixels((uint8_t*)pPixels, offsetX, offsetY, width, height);
-
-    CLSID pngClsid;
-    GetEncoderClsid(L"image/png", &pngClsid);
-    pRaw->Save(L"C:\\crossbartest.png", &pngClsid, NULL);
-    delete pRaw;
-    DeleteObject(pBmp);
-#endif
 
     pPrimitiveObject->SetTextureFromTexture(texture, width, height);
     pPrimitiveObject->SetWidth(width);
