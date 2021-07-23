@@ -21,6 +21,7 @@ Crossbar stores your commands in palettes, each of which contains 24-48 macros. 
 * Both Triggers, Right depressed first (Press and hold right trigger, then press and hold left trigger, then press button with both depressed.)
 * Left Trigger Double Tap (Press and release left trigger, then quickly re-press and hold left trigger)
 * Right Trigger Double Tap (Press and release right trigger, then quickly re-press and hold right trigger)
+
 Please note that you will need to alter settings to enable the latter 3 options.  If you do not enable 'allowpriority', then holding left+right trigger will always correspond to the **Both triggers, Left depressed first** bindings regardless of which order you pressed them.  If you do not enable 'allowdoubletap', then double tapping triggers will not change your macro set and you'll simply be on **Left Trigger** or **Right Trigger**.  Thus, a palette with default settings will only have 24 triggerable macros while a palette with everything enabled will have the full 48.
 
 # Macro Storage
