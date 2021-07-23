@@ -13,6 +13,9 @@ CrossbarBindButton::~CrossbarBindButton()
 
 void CrossbarBindButton::HandleConfirm()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)

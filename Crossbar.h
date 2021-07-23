@@ -33,7 +33,7 @@ private:
     uint8_t mCurrentJob;
     char mCurrentName[256];
     MacroMode mCurrentMode;
-
+    bool mZoning;
 
 public:
 
@@ -55,7 +55,7 @@ public:
     }
     double GetVersion(void) const override
     {
-        return 1.00f;
+        return 1.01f;
     }
     int32_t GetPriority(void) const override
     {

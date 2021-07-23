@@ -9,6 +9,9 @@ CrossbarSelectBindFlags::CrossbarSelectBindFlags(FontMenuBase* pMainMenu, Single
 
 void CrossbarSelectBindFlags::HandleConfirm()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -46,6 +49,9 @@ void CrossbarSelectBindFlags::HandleConfirm()
 
 void CrossbarSelectBindFlags::HandleButtonUp()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)

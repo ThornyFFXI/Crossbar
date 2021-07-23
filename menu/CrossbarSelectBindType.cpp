@@ -14,6 +14,9 @@ MacroMode CrossbarSelectBindType::GetModeOverride()
 }
 void CrossbarSelectBindType::HandleConfirm()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -71,6 +74,9 @@ void CrossbarSelectBindType::HandleConfirm()
 }
 void CrossbarSelectBindType::HandleButtonUp()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)

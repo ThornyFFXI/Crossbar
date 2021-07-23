@@ -61,7 +61,7 @@ SingleMacroInfo_t::SingleMacroInfo_t(IAshitaCore* pAshitaCore, CrossbarSettings*
                     bool selfTarget = (pResource->Targets == 1);
                     sprintf_s(IconCommand, 256, "/ja \"%s\" %s", pResource->Name[0], selfTarget ? "<me>" : "<t>");
                     strcpy_s(IconText, 256, pResource->Name[0]);
-                    sprintf_s(IconFile, 256, "%sresources/crossbar/abilities/%u.png", pAshitaCore->GetInstallPath(), pResource->Id - 512u);
+                    strcpy_s(IconFile, 256, "DEFAULT");
                     this->pResource = pResource;
                 }
             }
@@ -77,7 +77,7 @@ SingleMacroInfo_t::SingleMacroInfo_t(IAshitaCore* pAshitaCore, CrossbarSettings*
                     bool selfTarget = (pResource->Targets == 1);
                     sprintf_s(IconCommand, 256, "/ma \"%s\" %s", pResource->Name[0], selfTarget ? "<me>" : "<t>");
                     strcpy_s(IconText, 256, pResource->Name[0]);
-                    sprintf_s(IconFile, 256, "%sresources/crossbar/spells/%u.png", pAshitaCore->GetInstallPath(), pResource->Index);
+                    strcpy_s(IconFile, 256, "DEFAULT");
                     this->pResource = pResource;
                 }
             }
@@ -93,7 +93,7 @@ SingleMacroInfo_t::SingleMacroInfo_t(IAshitaCore* pAshitaCore, CrossbarSettings*
                     bool selfTarget = (pResource->Targets == 1);
                     sprintf_s(IconCommand, 256, "/ws \"%s\" %s", pResource->Name[0], selfTarget ? "<me>" : "<t>");
                     strcpy_s(IconText, 256, pResource->Name[0]);
-                    sprintf_s(IconFile, 256, "%sresources/crossbar/weaponskills/%u.png", pAshitaCore->GetInstallPath(), pResource->Id);
+                    strcpy_s(IconFile, 256, "DEFAULT");
                     this->pResource = pResource;
                 }
             }
@@ -109,7 +109,7 @@ SingleMacroInfo_t::SingleMacroInfo_t(IAshitaCore* pAshitaCore, CrossbarSettings*
                     bool selfTarget = (pResource->Targets == 1);
                     sprintf_s(IconCommand, 256, "/item \"%s\" %s", pResource->Name[0], selfTarget ? "<me>" : "<t>");
                     strcpy_s(IconText, 256, pResource->Name[0]);
-                    sprintf_s(IconFile, 256, "%sresources/crossbar/items/%u.png", pAshitaCore->GetInstallPath(), pResource->Id);
+                    strcpy_s(IconFile, 256, "DEFAULT");
                     this->pResource = pResource;
                 }
             }
@@ -124,7 +124,7 @@ SingleMacroInfo_t::SingleMacroInfo_t(IAshitaCore* pAshitaCore, CrossbarSettings*
         }
         else if (_stricmp(subNode->name(), "file") == 0)
         {
-            sprintf_s(IconFile, 256, "%sresources/crossbar/%s", pAshitaCore->GetInstallPath(), subNode->value());
+            sprintf_s(IconFile, 256, "%s", subNode->value());
         }
         else if (_stricmp(subNode->name(), "drawcost") == 0)
         {

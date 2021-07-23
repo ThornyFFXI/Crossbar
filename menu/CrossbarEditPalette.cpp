@@ -7,6 +7,9 @@ CrossbarEditPalette::CrossbarEditPalette(FontMenuBase* pMainMenu, CrossbarBindin
 {}
 void CrossbarEditPalette::HandleConfirm()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -62,6 +65,9 @@ void CrossbarEditPalette::HandleSubMenu(FontMenuCompletionData_t data)
 
 void CrossbarEditPalette::ReceiveText(const char* value)
 {
+    if (mIsHidden)
+        return;
+
 	if (pSubMenu)
 	{
 		pSubMenu->ReceiveText(value);

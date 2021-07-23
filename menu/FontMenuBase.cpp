@@ -10,6 +10,7 @@ FontMenuBase::FontMenuBase(IAshitaCore* pAshitaCore, CrossbarSettings* pSettings
 	, mIsFinished(false)
 {
 	pFontUI = new FontMenuUI(pAshitaCore, pSettings, "CrossbarFontUI");
+    mIsHidden = false;
 }
 FontMenuBase::FontMenuBase(FontMenuBase* pBase, FontMenuState state)
 	: pAshitaCore(pBase->pAshitaCore)
@@ -31,6 +32,7 @@ FontMenuBase::~FontMenuBase()
 
 void FontMenuBase::Draw()
 {
+    mIsHidden = false;
 	if (pSubMenu)
 	{
 		FontMenuCompletionData_t data;
@@ -49,6 +51,12 @@ void FontMenuBase::Draw()
 
 	pFontUI->Draw(&mState);
 }
+void FontMenuBase::Hide()
+{
+    mIsHidden = true;
+    pFontUI->Hide();
+}
+
 bool FontMenuBase::GetIsFinished(FontMenuCompletionData_t* buffer)
 {
 	if (mIsFinished)
@@ -68,6 +76,9 @@ MacroMode FontMenuBase::GetModeOverride()
 }
 void FontMenuBase::ReceiveText(const char* value)
 {
+    if (mIsHidden)
+        return;
+
 	if (pSubMenu)
 	{
 		pSubMenu->ReceiveText(value);
@@ -82,6 +93,9 @@ void FontMenuBase::ReceiveText(const char* value)
 }
 void FontMenuBase::HandleButtonUp()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -97,6 +111,9 @@ void FontMenuBase::HandleButtonUp()
 }
 void FontMenuBase::HandleButtonRight()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSettings->pBinding->mPlaystationConfirm)
@@ -106,6 +123,9 @@ void FontMenuBase::HandleButtonRight()
 }
 void FontMenuBase::HandleButtonDown()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSettings->pBinding->mPlaystationConfirm)
@@ -115,6 +135,9 @@ void FontMenuBase::HandleButtonDown()
 }
 void FontMenuBase::HandleButtonLeft()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -136,6 +159,9 @@ void FontMenuBase::HandleButtonLeft()
 }
 void FontMenuBase::HandleConfirm()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -162,6 +188,9 @@ void FontMenuBase::HandleConfirm()
 }
 void FontMenuBase::HandleCancel()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -181,6 +210,9 @@ void FontMenuBase::HandleCancel()
 }
 void FontMenuBase::HandleDpadUp()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -208,6 +240,9 @@ void FontMenuBase::HandleDpadUp()
 }
 void FontMenuBase::HandleDpadRight()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -219,11 +254,12 @@ void FontMenuBase::HandleDpadRight()
 	{
 		return;
 	}
-
-	//Unused in default menu.
 }
 void FontMenuBase::HandleDpadDown()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -251,6 +287,9 @@ void FontMenuBase::HandleDpadDown()
 }
 void FontMenuBase::HandleDpadLeft()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -267,6 +306,9 @@ void FontMenuBase::HandleDpadLeft()
 }
 void FontMenuBase::HandleMacro(MacroButton button, MacroMode mode)
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)

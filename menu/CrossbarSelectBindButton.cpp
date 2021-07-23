@@ -9,6 +9,9 @@ CrossbarSelectBindButton::CrossbarSelectBindButton(FontMenuBase* pMainMenu, Cros
 
 void CrossbarSelectBindButton::HandleCancel()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -28,6 +31,9 @@ void CrossbarSelectBindButton::HandleCancel()
 
 void CrossbarSelectBindButton::HandleConfirm()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -52,6 +58,9 @@ void CrossbarSelectBindButton::HandleConfirm()
 
 void CrossbarSelectBindButton::HandleMacro(MacroButton button, MacroMode mode)
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)

@@ -5,11 +5,13 @@
 #pragma once
 #endif
 #include "CrossbarMacro.h"
+#include "../display/GdiItem.h"
 
 class CrossbarItemMacro : public CrossbarMacro
 {
 private:
     IItem* pItem;
+    GdiItem* pGdiItem;
     std::chrono::steady_clock::time_point mActivationTime;
     bool mIsBlocked;
     bool mIsTransparent;
@@ -18,11 +20,15 @@ private:
     int mRecast;
 
 public:
+    const uint32_t mVanadielOffset = 0x3C307D70;
+    static DWORD pRealTime;
+
     CrossbarItemMacro(IAshitaCore* pAshitaCore, CrossbarSettings* pSettings, SingleMacroInfo_t macroSettings, bool offset, int index);
     ~CrossbarItemMacro();
 
     int GetItemCount();
     int GetItemRecast();
+    uint32_t GetRealTime();
     bool Draw(GdiDIB* pDIB) override;
     void LoadItemResource();
     void TriggerMacro() override;

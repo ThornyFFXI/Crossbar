@@ -17,6 +17,9 @@ CrossbarSelectBindAction::CrossbarSelectBindAction(FontMenuBase* pMainMenu, Cros
 
 void CrossbarSelectBindAction::HandleConfirm()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -121,6 +124,9 @@ void CrossbarSelectBindAction::HandleConfirm()
 
 void CrossbarSelectBindAction::HandleButtonUp()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -292,6 +298,9 @@ void CrossbarSelectBindAction::HandleSubMenu(FontMenuCompletionData_t data)
 
 void CrossbarSelectBindAction::HandleButtonLeft()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -318,6 +327,9 @@ void CrossbarSelectBindAction::HandleButtonLeft()
 }
 void CrossbarSelectBindAction::ReceiveText(const char* value)
 {
+    if (mIsHidden)
+        return;
+
 	if (pSubMenu)
 	{
 		pSubMenu->ReceiveText(value);

@@ -149,6 +149,9 @@
     <ClCompile Include="skillchain\ResonationTracker.cpp">
       <Filter>skillchain</Filter>
     </ClCompile>
+    <ClCompile Include="display\GdiItem.cpp">
+      <Filter>display\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crossbar.h">
@@ -243,6 +246,9 @@
     </ClInclude>
     <ClInclude Include="skillchain\ResonationTracker.h">
       <Filter>skillchain</Filter>
+    </ClInclude>
+    <ClInclude Include="display\GdiItem.h">
+      <Filter>display\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

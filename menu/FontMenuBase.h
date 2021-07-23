@@ -18,6 +18,7 @@ public:
     FontMenuBase* pSubMenu;
     FontMenuCompletionData_t mCompletionData;
     bool mIsFinished;
+    bool mIsHidden;
 
     IAshitaCore* pAshitaCore;
     CrossbarSettings* pSettings;
@@ -28,6 +29,7 @@ public:
     virtual ~FontMenuBase();
 
     void Draw();
+    void Hide();
     virtual bool GetIsFinished(FontMenuCompletionData_t* buffer);
 
     virtual MacroMode GetModeOverride();

@@ -4,7 +4,9 @@ CrossbarCommandMacro::CrossbarCommandMacro(IAshitaCore* pAshitaCore, CrossbarSet
     : CrossbarMacro(pAshitaCore, pSettings, macroSettings, offset, index)
 {
     std::list<std::string> paths;
-    paths.push_back(std::string(macroSettings.IconFile));
+    char buffer[256];
+    sprintf_s(buffer, 256, "%sresources//crossbar//%s", pAshitaCore->GetInstallPath(), macroSettings.IconFile);
+    paths.push_back(std::string(buffer));
     for (std::list<std::string>::iterator iter = paths.begin(); iter != paths.end(); iter++)
     {
         if (LoadImageFromFullPath(*iter))

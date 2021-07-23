@@ -5,10 +5,11 @@ CrossbarSpellMacro::CrossbarSpellMacro(IAshitaCore* pAshitaCore, CrossbarSetting
 {
     pSpell = reinterpret_cast<ISpell*>(macroSettings.pResource);
     std::list<std::string> paths;
-    paths.push_back(std::string(macroSettings.IconFile));
+    char buffer[256];
+    sprintf_s(buffer, 256, "%sresources//crossbar//%s", pAshitaCore->GetInstallPath(), macroSettings.IconFile);
+    paths.push_back(std::string(buffer));
     if (pSpell)
     {
-        char buffer[256];
         sprintf_s(buffer, 256, "%sresources//crossbar//spells/%u.png", pAshitaCore->GetInstallPath(), pSpell->Index);
         paths.push_back(std::string(buffer));
         sprintf_s(buffer, 256, "%sresources//crossbar//spells/%u.bmp", pAshitaCore->GetInstallPath(), pSpell->Index);
@@ -74,10 +75,17 @@ bool CrossbarSpellMacro::Draw(GdiDIB* pDIB)
     {
         if (mMacroSettings.DrawCross == DrawSetting::Draw)
         {
-            if (!pAshitaCore->GetMemoryManager()->GetPlayer()->HasSpell(pSpell->Id))
+            try
+            {
+                if (!pAshitaCore->GetMemoryManager()->GetPlayer()->HasSpell(pSpell->Id))
+                {
+                    isBlocked = true;
+                }
+            }
+            catch (...)
             {
                 isBlocked = true;
-            }
+            }         
 
             if (!CheckSpellAvailable())
             {

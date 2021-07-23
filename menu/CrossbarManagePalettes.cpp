@@ -6,6 +6,9 @@ CrossbarManagePalettes::CrossbarManagePalettes(FontMenuBase* pMainMenu, Crossbar
 {}
 void CrossbarManagePalettes::HandleConfirm()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)
@@ -33,6 +36,16 @@ void CrossbarManagePalettes::HandleConfirm()
 }
 void CrossbarManagePalettes::HandleButtonUp()
 {
+    if (mIsHidden)
+        return;
+    if (mIsFinished)
+        return;
+    if (pSubMenu)
+    {
+        pSubMenu->HandleButtonUp();
+        return;
+    }
+
 	FontMenuOption* pOption = &mState.mOptions[mState.mSelectedIndex];
 	if (strcmp(pOption->GetValue(), "CANCEL") == 0)
 		return;
@@ -66,6 +79,16 @@ void CrossbarManagePalettes::HandleButtonUp()
 }
 void CrossbarManagePalettes::HandleButtonLeft()
 {
+    if (mIsHidden)
+        return;
+    if (mIsFinished)
+        return;
+    if (pSubMenu)
+    {
+        pSubMenu->HandleButtonLeft();
+        return;
+    }
+
 	FontMenuOption* pOption = &mState.mOptions[mState.mSelectedIndex];
 	if (strcmp(pOption->GetValue(), "CANCEL") == 0)
 		return;

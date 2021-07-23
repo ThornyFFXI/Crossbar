@@ -23,6 +23,7 @@ public:
     ~FontMenuUI();
 
     void Draw(FontMenuState* pState);
+    void Hide();
 
 private:
     void DrawInputPrompt(FontMenuState* pState);

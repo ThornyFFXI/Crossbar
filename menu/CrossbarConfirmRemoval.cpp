@@ -5,6 +5,9 @@ CrossbarConfirmRemoval::CrossbarConfirmRemoval(FontMenuBase* pMainMenu, const ch
 {}
 void CrossbarConfirmRemoval::HandleConfirm()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)

@@ -1,6 +1,9 @@
 #include "Crossbar.h"
+#pragma comment(lib, "psapi.lib")
+#include <psapi.h>
 
 ResonationTracker* CrossbarWeaponskillMacro::pResonation = NULL;
+DWORD CrossbarItemMacro::pRealTime                   = NULL;
 
 __declspec(dllexport) IPlugin* __stdcall expCreatePlugin(const char* args)
 {
@@ -28,7 +31,13 @@ bool Crossbar::Initialize(IAshitaCore* core, ILogManager* logger, const uint32_t
 	pMenu = NULL;
 	pCanvas = NULL;
 	pBindings = NULL;
-	pSettings = NULL;
+    pSettings                             = NULL;
+    mZoning                               = false;
+	
+    MODULEINFO mod = {0};
+    ::GetModuleInformation(::GetCurrentProcess(), ::GetModuleHandle("FFXiMain.dll"), &mod, sizeof(MODULEINFO));
+    CrossbarItemMacro::pRealTime = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "8B0D????????8B410C8B49108D04808D04808D04808D04C1C3", 2, 0);
+    
 	if (m_AshitaCore->GetMemoryManager()->GetParty()->GetMemberIsActive(0))
 	{
 		strcpy_s(mCurrentName, 256, m_AshitaCore->GetMemoryManager()->GetParty()->GetMemberName(0));
@@ -90,6 +99,11 @@ bool Crossbar::HandleIncomingPacket(uint16_t id, uint32_t size, const uint8_t* d
 			mCurrentJob = Read8(data, 0xB4);
 			InitializeCrossbar();
 		}
+        mZoning = false;
+	}
+	if (id == 0x00B)
+	{
+        mZoning = true;
 	}
 	if (id == 0x28)
 	{
@@ -149,6 +163,28 @@ void Crossbar::Direct3DPresent(const RECT* pSourceRect, const RECT* pDestRect, H
 		{
 			m_AshitaCore->GetChatManager()->Write(0, false, "Successfully hooked XInput.");
 		}
+	}
+
+	
+	bool draw   = true;
+    int myIndex = m_AshitaCore->GetMemoryManager()->GetParty()->GetMemberTargetIndex(0);
+    if ((mZoning)
+		|| (myIndex < 1)
+		|| (m_AshitaCore->GetMemoryManager()->GetEntity()->GetRawEntity(myIndex) == 0)
+		|| ((m_AshitaCore->GetMemoryManager()->GetEntity()->GetRenderFlags0(myIndex) & 0x200) == 0)
+		|| ((m_AshitaCore->GetMemoryManager()->GetEntity()->GetRenderFlags0(myIndex) & 0x4000) != 0)
+		|| (m_AshitaCore->GetMemoryManager()->GetEntity()->GetStatus(myIndex) == 4))
+    {
+        if (pCanvas)
+        {
+            pCanvas->Hide();
+        }
+        
+		if (pMenu)
+        {
+            pMenu->Hide();
+        }
+        return;
 	}
 
 	if (pMenu)

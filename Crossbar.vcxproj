@@ -176,6 +176,7 @@ cd build
     <ClCompile Include="display\CrossbarCanvas.cpp" />
     <ClCompile Include="display\CrossbarMacroSet.cpp" />
     <ClCompile Include="display\GdiDIB.cpp" />
+    <ClCompile Include="display\GdiItem.cpp" />
     <ClCompile Include="input\CrossbarDirectInput.cpp" />
     <ClCompile Include="input\CrossbarXInput.cpp" />
     <ClCompile Include="input\InputHandler.cpp" />
@@ -209,6 +210,7 @@ cd build
     <ClInclude Include="display\CrossbarCanvas.h" />
     <ClInclude Include="display\CrossbarMacroSet.h" />
     <ClInclude Include="display\GdiDIB.h" />
+    <ClInclude Include="display\GdiItem.h" />
     <ClInclude Include="input\CrossbarDirectInput.h" />
     <ClInclude Include="input\CrossbarXInput.h" />
     <ClInclude Include="input\InputHandler.h" />

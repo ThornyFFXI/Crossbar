@@ -13,6 +13,9 @@ CrossbarMainMenu::~CrossbarMainMenu()
 
 void CrossbarMainMenu::HandleConfirm()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)

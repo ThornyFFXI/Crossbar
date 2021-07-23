@@ -3,12 +3,14 @@
 CrossbarItemMacro::CrossbarItemMacro(IAshitaCore* pAshitaCore, CrossbarSettings* pSettings, SingleMacroInfo_t macroSettings, bool offset, int index)
     : CrossbarMacro(pAshitaCore, pSettings, macroSettings, offset, index)
 {
+    pGdiItem = NULL;
     pItem = reinterpret_cast<IItem*>(macroSettings.pResource);
     std::list<std::string> paths;
-    paths.push_back(std::string(macroSettings.IconFile));
+    char buffer[256];
+    sprintf_s(buffer, 256, "%sresources//crossbar//%s", pAshitaCore->GetInstallPath(), macroSettings.IconFile);
+    paths.push_back(std::string(buffer));
     if (pItem)
     {
-        char buffer[256];
         sprintf_s(buffer, 256, "%sresources//crossbar//items/%u.png", pAshitaCore->GetInstallPath(), pItem->Id);
         paths.push_back(std::string(buffer));
         sprintf_s(buffer, 256, "%sresources//crossbar//items/%u.bmp", pAshitaCore->GetInstallPath(), pItem->Id);
@@ -34,6 +36,10 @@ CrossbarItemMacro::CrossbarItemMacro(IAshitaCore* pAshitaCore, CrossbarSettings*
             pImage = pSettings->pMacro->pDefaultItemIcon;
         }
     }
+}
+CrossbarItemMacro::~CrossbarItemMacro()
+{
+    SAFE_DELETE(pGdiItem);
 }
 
 int CrossbarItemMacro::GetItemCount()
@@ -64,6 +70,9 @@ int CrossbarItemMacro::GetItemRecast()
     for (int x = 0; x < 16; x++)
     {
         Ashita::FFXI::equipmententry_t* pEquip = pInventory->GetEquippedItem(x);
+        if (pEquip == NULL)
+            continue;
+
         if (Read8(&pEquip->Index, 0) == 0)
             continue;
 
@@ -76,11 +85,22 @@ int CrossbarItemMacro::GetItemRecast()
             if (item->Extra[3] & 0x40)
                 return 0;
 
+            uint32_t useTime   = Read32(item, 20) + mVanadielOffset;
+            uint32_t timeStamp = GetRealTime();
+            int32_t timeRemaining = useTime - timeStamp;
+
             //Calculate recast..
-            return 1;
+            return max(1, timeRemaining);
         }
     }
     return -1;
+}
+
+uint32_t CrossbarItemMacro::GetRealTime()
+{
+    DWORD realTime = Read32(pRealTime, 0);
+    realTime       = Read32(realTime, 0);
+    return Read32(realTime, 0x0C);
 }
 
 bool CrossbarItemMacro::Draw(GdiDIB* pDIB)
@@ -198,7 +218,8 @@ bool CrossbarItemMacro::Draw(GdiDIB* pDIB)
 }
 void CrossbarItemMacro::LoadItemResource()
 {
-    //Need to load bitmap into a gdiplus image from item resource..
+    pGdiItem = new GdiItem(pItem->Bitmap, pItem->ImageSize);
+    pImage   = pGdiItem->GetImage();
 }
 void CrossbarItemMacro::TriggerMacro()
 {

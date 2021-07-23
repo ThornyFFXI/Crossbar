@@ -65,6 +65,10 @@ void FontMenuUI::Draw(FontMenuState* pState)
 	pDIB->ApplySectionToPrimitive(pPrimitiveObject, 0, 0, pSettings->pBinding->mMenuWidth, height);
 	pPrimitiveObject->SetVisible(true);
 }
+void FontMenuUI::Hide()
+{
+    pPrimitiveObject->SetVisible(false);
+}
 void FontMenuUI::DrawInputPrompt(FontMenuState* pState)
 {
 	Gdiplus::Graphics* pGraphics = pDIB->GetGraphics();

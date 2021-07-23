@@ -13,6 +13,9 @@ CrossbarAddPalette::~CrossbarAddPalette()
 
 void CrossbarAddPalette::HandleConfirm()
 {
+    if (mIsHidden)
+        return;
+
 	if (mIsFinished)
 		return;
 	if (pSubMenu)

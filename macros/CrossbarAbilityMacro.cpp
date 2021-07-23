@@ -5,10 +5,11 @@ CrossbarAbilityMacro::CrossbarAbilityMacro(IAshitaCore* pAshitaCore, CrossbarSet
 {
     pAbility = reinterpret_cast<IAbility*>(macroSettings.pResource);
     std::list<std::string> paths;
-    paths.push_back(std::string(macroSettings.IconFile));
+    char buffer[256];
+    sprintf_s(buffer, 256, "%sresources//crossbar//%s", pAshitaCore->GetInstallPath(), macroSettings.IconFile);
+    paths.push_back(std::string(buffer));
     if (pAbility)
     {
-        char buffer[256];
         sprintf_s(buffer, 256, "%sresources//crossbar//abilities/%u.png", pAshitaCore->GetInstallPath(), pAbility->Id - 512);
         paths.push_back(std::string(buffer));
         sprintf_s(buffer, 256, "%sresources//crossbar//abilities/%u.bmp", pAshitaCore->GetInstallPath(), pAbility->Id - 512);
@@ -91,7 +92,14 @@ bool CrossbarAbilityMacro::Draw(GdiDIB* pDIB)
     {
         if (mMacroSettings.DrawCross == DrawSetting::Draw)
         {
-            if (!pAshitaCore->GetMemoryManager()->GetPlayer()->HasAbility(pAbility->Id))
+            try
+            {
+                if (!pAshitaCore->GetMemoryManager()->GetPlayer()->HasAbility(pAbility->Id))
+                {
+                    isBlocked = true;
+                }
+            }
+            catch (...)
             {
                 isBlocked = true;
             }
