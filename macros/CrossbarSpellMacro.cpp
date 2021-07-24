@@ -158,7 +158,14 @@ bool CrossbarSpellMacro::Draw(GdiDIB* pDIB)
 
     if (mMacroSettings.DrawName == DrawSetting::Draw)
     {
-        DrawName(pDIB, mMacroSettings.IconText);
+        if (strcmp(mMacroSettings.IconText, "DEFAULT") == 0)
+        {
+            DrawName(pDIB, pSpell->Name[0]);
+        }
+        else
+        {
+            DrawName(pDIB, mMacroSettings.IconText);
+        }
     }
 
     return true;
@@ -186,5 +193,42 @@ bool CrossbarSpellMacro::CheckSpellAvailable()
 void CrossbarSpellMacro::TriggerMacro()
 {
     mActivationTime = std::chrono::steady_clock::now() + std::chrono::milliseconds(pSettings->mConfig.TriggerDuration);
-    pAshitaCore->GetChatManager()->QueueCommand(-1, mMacroSettings.IconCommand);
+    if (strcmp(mMacroSettings.IconCommand, "DEFAULT") == 0)
+    {
+        int targets = pSpell->Targets;
+
+        //Adjust valid targets for buff songs if we have pianissimo active.
+        if ((pSpell->Type == 0x05) && (pSpell->Targets == 1))
+        {
+            for (int x = 0; x < 32; x++)
+            {
+                if (pAshitaCore->GetMemoryManager()->GetPlayer()->GetBuffs()[x] == 409)
+                {
+                    targets = 5;
+                    break;
+                }
+            }
+        }
+
+        //Adjust valid targets for indi spells if we have entrust active.
+        if (strncmp(pSpell->Name[2], "Indi-", 5) == 0)
+        {
+            for (int x = 0; x < 32; x++)
+            {
+                if (pAshitaCore->GetMemoryManager()->GetPlayer()->GetBuffs()[x] == 584)
+                {
+                    targets = 5;
+                    break;
+                }
+            }
+        }
+
+        char buffer[256];
+        sprintf_s(buffer, 256, "/ma \"%s\" %s", pSpell->Name[0], (pSpell->Targets == 1) ? "<me>" : "<t>");
+        pAshitaCore->GetChatManager()->QueueCommand(-1, buffer);
+    }
+    else
+    {
+        pAshitaCore->GetChatManager()->QueueCommand(-1, mMacroSettings.IconCommand);
+    }
 }

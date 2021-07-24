@@ -170,7 +170,14 @@ bool CrossbarAbilityMacro::Draw(GdiDIB* pDIB)
 
     if (mMacroSettings.DrawName == DrawSetting::Draw)
     {
-        DrawName(pDIB, mMacroSettings.IconText);
+        if (strcmp(mMacroSettings.IconText, "DEFAULT") == 0)
+        {
+            DrawName(pDIB, pAbility->Name[0]);
+        }
+        else
+        {
+            DrawName(pDIB, mMacroSettings.IconText);
+        }
     }
 
     return true;
@@ -178,5 +185,14 @@ bool CrossbarAbilityMacro::Draw(GdiDIB* pDIB)
 void CrossbarAbilityMacro::TriggerMacro()
 {
     mActivationTime = std::chrono::steady_clock::now() + std::chrono::milliseconds(pSettings->mConfig.TriggerDuration);
-    pAshitaCore->GetChatManager()->QueueCommand(-1, mMacroSettings.IconCommand);
+    if (strcmp(mMacroSettings.IconCommand, "DEFAULT") == 0)
+    {
+        char buffer[256];
+        sprintf_s(buffer, 256, "/ja \"%s\" %s", pAbility->Name[0], (pAbility->Targets == 1) ? "<me>" : "<t>");
+        pAshitaCore->GetChatManager()->QueueCommand(-1, buffer);
+    }
+    else
+    {
+        pAshitaCore->GetChatManager()->QueueCommand(-1, mMacroSettings.IconCommand);
+    }
 }

@@ -26,9 +26,9 @@ SingleMacroInfo_t::SingleMacroInfo_t(IAshitaCore* pAshitaCore, CrossbarSettings*
     , DrawSkillchain(DrawSetting::Default)
     , DrawTrigger(DrawSetting::Default)
 {
-    memset(IconCommand, 0, 256);
-    memset(IconText, 0, 256);
-    memset(IconFile, 0, 256);
+    strcpy_s(IconCommand, 256, "DEFAULT");
+    strcpy_s(IconText, 256, "DEFAULT");
+    strcpy_s(IconFile, 256, "DEFAULT");
 
     for (xml_node<>* subNode = baseNode->first_node(); subNode; subNode = subNode->next_sibling())
     {
@@ -58,10 +58,6 @@ SingleMacroInfo_t::SingleMacroInfo_t(IAshitaCore* pAshitaCore, CrossbarSettings*
                     pResource = pAshitaCore->GetResourceManager()->GetAbilityByName(subNode->value(), 0);
                 if (pResource != NULL)
                 {
-                    bool selfTarget = (pResource->Targets == 1);
-                    sprintf_s(IconCommand, 256, "/ja \"%s\" %s", pResource->Name[0], selfTarget ? "<me>" : "<t>");
-                    strcpy_s(IconText, 256, pResource->Name[0]);
-                    strcpy_s(IconFile, 256, "DEFAULT");
                     this->pResource = pResource;
                 }
             }
@@ -74,10 +70,6 @@ SingleMacroInfo_t::SingleMacroInfo_t(IAshitaCore* pAshitaCore, CrossbarSettings*
                     pResource = pAshitaCore->GetResourceManager()->GetSpellByName(subNode->value(), 0);
                 if (pResource != NULL)
                 {
-                    bool selfTarget = (pResource->Targets == 1);
-                    sprintf_s(IconCommand, 256, "/ma \"%s\" %s", pResource->Name[0], selfTarget ? "<me>" : "<t>");
-                    strcpy_s(IconText, 256, pResource->Name[0]);
-                    strcpy_s(IconFile, 256, "DEFAULT");
                     this->pResource = pResource;
                 }
             }
@@ -90,10 +82,6 @@ SingleMacroInfo_t::SingleMacroInfo_t(IAshitaCore* pAshitaCore, CrossbarSettings*
                     pResource = pAshitaCore->GetResourceManager()->GetAbilityByName(subNode->value(), 0);
                 if (pResource != NULL)
                 {
-                    bool selfTarget = (pResource->Targets == 1);
-                    sprintf_s(IconCommand, 256, "/ws \"%s\" %s", pResource->Name[0], selfTarget ? "<me>" : "<t>");
-                    strcpy_s(IconText, 256, pResource->Name[0]);
-                    strcpy_s(IconFile, 256, "DEFAULT");
                     this->pResource = pResource;
                 }
             }
@@ -106,10 +94,6 @@ SingleMacroInfo_t::SingleMacroInfo_t(IAshitaCore* pAshitaCore, CrossbarSettings*
                     pResource = pAshitaCore->GetResourceManager()->GetItemByName(subNode->value(), 0);
                 if (pResource != NULL)
                 {
-                    bool selfTarget = (pResource->Targets == 1);
-                    sprintf_s(IconCommand, 256, "/item \"%s\" %s", pResource->Name[0], selfTarget ? "<me>" : "<t>");
-                    strcpy_s(IconText, 256, pResource->Name[0]);
-                    strcpy_s(IconFile, 256, "DEFAULT");
                     this->pResource = pResource;
                 }
             }

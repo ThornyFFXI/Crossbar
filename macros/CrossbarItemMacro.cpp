@@ -211,7 +211,14 @@ bool CrossbarItemMacro::Draw(GdiDIB* pDIB)
 
     if (mMacroSettings.DrawName == DrawSetting::Draw)
     {
-        DrawName(pDIB, mMacroSettings.IconText);
+        if (strcmp(mMacroSettings.IconText, "DEFAULT") == 0)
+        {
+            DrawName(pDIB, pItem->Name[0]);
+        }
+        else
+        {
+            DrawName(pDIB, mMacroSettings.IconText);
+        }
     }
 
     return true;
@@ -224,5 +231,14 @@ void CrossbarItemMacro::LoadItemResource()
 void CrossbarItemMacro::TriggerMacro()
 {
     mActivationTime = std::chrono::steady_clock::now() + std::chrono::milliseconds(pSettings->mConfig.TriggerDuration);
-    pAshitaCore->GetChatManager()->QueueCommand(-1, mMacroSettings.IconCommand);
+    if (strcmp(mMacroSettings.IconCommand, "DEFAULT") == 0)
+    {
+        char buffer[256];
+        sprintf_s(buffer, 256, "/item \"%s\" %s", pItem->Name[0], (pItem->Targets == 1) ? "<me>" : "<t>");
+        pAshitaCore->GetChatManager()->QueueCommand(-1, buffer);
+    }
+    else
+    {
+        pAshitaCore->GetChatManager()->QueueCommand(-1, mMacroSettings.IconCommand);
+    }
 }

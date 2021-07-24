@@ -49,6 +49,18 @@ bool CrossbarCommandMacro::Draw(GdiDIB* pDIB)
         DrawTrigger(pDIB);
     }
 
+    if (mMacroSettings.DrawName == DrawSetting::Draw)
+    {
+        if (strcmp(mMacroSettings.IconText, "DEFAULT") == 0)
+        {
+            DrawName(pDIB, mMacroSettings.IconCommand);
+        }
+        else
+        {
+            DrawName(pDIB, mMacroSettings.IconText);
+        }
+    }
+
     return true;
 }
 void CrossbarCommandMacro::TriggerMacro()

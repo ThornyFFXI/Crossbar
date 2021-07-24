@@ -44,11 +44,6 @@ void CrossbarSelectBindAction::HandleConfirm()
 		int id = atoi(data.Result);
 		IAbility* pResource = pAshitaCore->GetResourceManager()->GetAbilityById(id);
 		macro.pResource = pResource;
-		if (pResource->Targets == 1)
-			sprintf_s(macro.IconCommand, 256, "/ja \"%s\" <me>", pResource->Name[0]);
-		else
-			sprintf_s(macro.IconCommand, 256, "/ja \"%s\" <t>", pResource->Name[0]);		
-		strcpy_s(macro.IconText, 256, pResource->Name[0]);
 		pSubMenu = new CrossbarSelectBindFlags(this, macro, mButtonName);
 		return;
 	}
@@ -78,11 +73,6 @@ void CrossbarSelectBindAction::HandleConfirm()
 		int id = atoi(data.Result);
 		IItem* pResource = pAshitaCore->GetResourceManager()->GetItemById(id);
 		macro.pResource = pResource;
-		if (pResource->Targets == 1)
-			sprintf_s(macro.IconCommand, 256, "/item \"%s\" <me>", pResource->Name[0]);
-		else
-			sprintf_s(macro.IconCommand, 256, "/item \"%s\" <t>", pResource->Name[0]);
-		strcpy_s(macro.IconText, 256, pResource->Name[0]);
 		pSubMenu = new CrossbarSelectBindFlags(this, macro, mButtonName);
 		return;
 	}
@@ -95,11 +85,6 @@ void CrossbarSelectBindAction::HandleConfirm()
 		int id = atoi(data.Result);
 		ISpell* pResource = pAshitaCore->GetResourceManager()->GetSpellById(id);
 		macro.pResource = pResource;
-		if (pResource->Targets == 1)
-			sprintf_s(macro.IconCommand, 256, "/ma \"%s\" <me>", pResource->Name[0]);
-		else
-			sprintf_s(macro.IconCommand, 256, "/ma \"%s\" <t>", pResource->Name[0]);
-		strcpy_s(macro.IconText, 256, pResource->Name[0]);
 		pSubMenu = new CrossbarSelectBindFlags(this, macro, mButtonName);
 		return;
 	}
@@ -112,11 +97,6 @@ void CrossbarSelectBindAction::HandleConfirm()
 		int id = atoi(data.Result);
 		IAbility* pResource = pAshitaCore->GetResourceManager()->GetAbilityById(id);
 		macro.pResource = pResource;
-		if (pResource->Targets == 1)
-			sprintf_s(macro.IconCommand, 256, "/ws \"%s\" <me>", pResource->Name[0]);
-		else
-			sprintf_s(macro.IconCommand, 256, "/ws \"%s\" <t>", pResource->Name[0]);
-		strcpy_s(macro.IconText, 256, pResource->Name[0]);
 		pSubMenu = new CrossbarSelectBindFlags(this, macro, mButtonName);
 		return;
 	}
