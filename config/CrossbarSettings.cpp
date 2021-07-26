@@ -372,7 +372,7 @@ MacroTheme_t::~MacroTheme_t()
 CrossbarSettings::CrossbarSettings(IAshitaCore* pAshitaCore, const char* playerName, uint32_t playerId)
 {
 	char themePath[256];
-	sprintf_s(themePath, 256, "%sresources/crossbar/themes/default.xml", pAshitaCore->GetInstallPath());
+	sprintf_s(themePath, 256, "%sresources/crossbar/themes/xinput.xml", pAshitaCore->GetInstallPath());
 
 	mConfig = CrossbarConfig_t();
 	mInput = InputConfig_t();
@@ -528,7 +528,7 @@ void CrossbarSettings::WriteDefaultSettings(const char* path)
 	{
 		outStream << "<crossbarsettings>\n";
 		outStream << "    <!--Themes should be in ashita/resources/crossbar/themes.-->\n";
-		outStream << "    <theme>default.xml</theme>\n";
+		outStream << "    <theme>xinput.xml</theme>\n";
 		outStream << "    \n";
 
 		outStream << "    <!--If enabled, you will have seperate palettes for L2>R2 and R2>L2 based on the order buttons were depressed.  This adds 8 bindings.-->\n";
