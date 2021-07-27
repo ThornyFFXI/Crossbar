@@ -1,7 +1,7 @@
 #ifndef __ASHITA_CrossbarDefines_H_INCLUDED__
 #define __ASHITA_CrossbarDefines_H_INCLUDED__
 #include "C:\Ashita 4\plugins\sdk\Ashita.h"
-#include "thirdparty\rapidxml.hpp"
+#include "thirdparty\rapidxml\rapidxml.hpp"
 #include <Windows.h>
 #include <atlbase.h>
 #include <gdiplus.h>
