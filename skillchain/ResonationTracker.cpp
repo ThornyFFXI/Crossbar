@@ -305,19 +305,16 @@ void ResonationTracker::HandleActionPacket(uint32_t size, uint8_t* data)
 
     if (actionType == 6)
     {
-        if (actionType == 4) //Spell finish
-        {
-            uint32_t actionId = Ashita::BinaryData::UnpackBitsBE((uint8_t*)data, 0, 86, 10);
-            uint32_t actorId = Read32(data, 5);
+        uint32_t actionId = Ashita::BinaryData::UnpackBitsBE((uint8_t*)data, 0, 86, 10);
+        uint32_t actorId = Read32(data, 5);
 
-            if (actionId == 94)
-            {
-                mAffinityMap[actorId] = std::chrono::steady_clock::now() + std::chrono::seconds(29);
-            }
-            if (actionId == 317)
-            {
-                mImmanenceMap[actorId] = std::chrono::steady_clock::now() + std::chrono::seconds(59);
-            }
+        if (actionId == 94)
+        {
+            mAffinityMap[actorId] = std::chrono::steady_clock::now() + std::chrono::seconds(29);
+        }
+        if (actionId == 317)
+        {
+            mImmanenceMap[actorId] = std::chrono::steady_clock::now() + std::chrono::seconds(59);
         }
     }
 }

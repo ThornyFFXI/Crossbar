@@ -45,11 +45,11 @@ CrossbarItemMacro::~CrossbarItemMacro()
 int CrossbarItemMacro::GetItemCount()
 {
     IInventory* pInventory = pAshitaCore->GetMemoryManager()->GetInventory();
-    int count = 0;
+    int count              = 0;
     for (int x = 1; x <= pInventory->GetContainerCountMax(0); x++)
     {
         Ashita::FFXI::item_t* item = pInventory->GetContainerItem(0, x);
-        if (item->Id == pItem->Id)
+        if ((item != NULL) && (item->Id == pItem->Id))
             count += item->Count;
     }
     for (int x = 1; x <= pInventory->GetContainerCountMax(3); x++)
@@ -58,10 +58,9 @@ int CrossbarItemMacro::GetItemCount()
             break;
 
         Ashita::FFXI::item_t* item = pInventory->GetContainerItem(3, x);
-        if (item->Id == pItem->Id)
+        if ((item != NULL) && (item->Id == pItem->Id))
             count += item->Count;
     }
-
     return count;
 }
 int CrossbarItemMacro::GetItemRecast()
