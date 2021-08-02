@@ -71,6 +71,9 @@ HRESULT CrossbarDirectInput::GetDeviceState(IDirectInputDevice8A* pDevice, DWORD
 		return result;
 	}
 
+    if (pInput->GetGameMenuActive())
+        return result;
+
 	if (sizeof(DIJOYSTATE) == cbData)
 	{
 		const auto joy = (DIJOYSTATE*)lpvData;
@@ -95,6 +98,9 @@ HRESULT CrossbarDirectInput::GetDeviceData(IDirectInputDevice8A* pDevice, DWORD 
 	{
 		return result;
 	}
+
+	if (pInput->GetGameMenuActive())
+        return result;
 
 	UpdateData(pDevice, cbObjectData, rgdod, pdwInOut, dwFlags);
 	return result;

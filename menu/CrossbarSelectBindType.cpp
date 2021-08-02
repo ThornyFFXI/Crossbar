@@ -1,7 +1,7 @@
 #include "CrossbarSelectBindType.h"
 
 CrossbarSelectBindType::CrossbarSelectBindType(FontMenuBase* pMainMenu, SingleMacroInfo_t* pButton, const char* buttonName, MacroMode mode)
-	: FontMenuBase(pMainMenu, GetInitialState(pMainMenu->pAshitaCore, buttonName))
+	: FontMenuBase(pMainMenu, GetInitialState(pMainMenu->pAshitaCore, buttonName, pMainMenu->pSettings->mConfig.UseLevelSync))
 	, pButton(pButton)
 	, mMode(mode)
 {
@@ -85,15 +85,21 @@ void CrossbarSelectBindType::HandleButtonUp()
 		return;
 	}
 
-	mState = GetInitialState(pAshitaCore, mButtonName);
+	mState = GetInitialState(pAshitaCore, mButtonName, pSettings->mConfig.UseLevelSync);
 }
 
-FontMenuState CrossbarSelectBindType::GetInitialState(IAshitaCore* pAshitaCore, const char* button)
+FontMenuState CrossbarSelectBindType::GetInitialState(IAshitaCore* pAshitaCore, const char* button, bool useSync)
 {
-	int mainJob = pAshitaCore->GetMemoryManager()->GetPlayer()->GetMainJob();
-	int mainJobLevel = pAshitaCore->GetMemoryManager()->GetPlayer()->GetMainJobLevel();
-	int subJob = pAshitaCore->GetMemoryManager()->GetPlayer()->GetSubJob();
-	int subJobLevel = pAshitaCore->GetMemoryManager()->GetPlayer()->GetSubJobLevel();
+    int mainJob      = pAshitaCore->GetMemoryManager()->GetPlayer()->GetMainJob();
+    int mainJobLevel = pAshitaCore->GetMemoryManager()->GetPlayer()->GetJobLevel(mainJob);
+    int subJob       = pAshitaCore->GetMemoryManager()->GetPlayer()->GetSubJob();
+    int subJobLevel  = pAshitaCore->GetMemoryManager()->GetPlayer()->GetJobLevel(subJob);
+
+    if (useSync)
+    {
+        mainJobLevel = pAshitaCore->GetMemoryManager()->GetPlayer()->GetMainJobLevel();
+        subJobLevel  = pAshitaCore->GetMemoryManager()->GetPlayer()->GetSubJobLevel();
+    }
 
 	std::map<int, std::string> mSkillNames = {
 		{32, "Divine Magic"},

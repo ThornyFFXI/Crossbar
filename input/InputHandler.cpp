@@ -19,6 +19,10 @@ bool InputHandler::GetMenuActive()
 {
 	return pCrossbar->GetMenuActive();
 }
+bool InputHandler::GetGameMenuActive()
+{
+    return ((mConfig.AllowButtonsInMenu) && (pCrossbar->GetGameMenuActive()));
+}
 void InputHandler::HandleState(InputData_t input)
 {
 	pCrossbar->SetMacroMode(GetMacroMode(input));

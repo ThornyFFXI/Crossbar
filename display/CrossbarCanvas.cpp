@@ -15,6 +15,7 @@ CrossbarCanvas::CrossbarCanvas(IAshitaCore* pAshitaCore, CrossbarSettings* pSett
     pSubDisplay->GetGraphics()->SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
     pSubDisplay->GetGraphics()->SetTextRenderingHint(Gdiplus::TextRenderingHintClearTypeGridFit);
     pSubPrimitive = pAshitaCore->GetPrimitiveManager()->Create("CrossbarSub");
+    mLastSingleMode = MacroMode::NoTrigger;
     
     RECT rect;
     GetWindowRect(pAshitaCore->GetProperties()->GetFinalFantasyHwnd(), &rect);
@@ -90,6 +91,12 @@ void CrossbarCanvas::Draw(MacroMode mode)
     }
     else
     {
+        if (mLastSingleMode != mode)
+        {
+            pMacros[(int)mode]->ForceMacroRedraw();
+            mLastSingleMode = mode;
+        }
+
         pMainPrimitive->SetVisible(false);
         if (pMacros[(int)mode]->Draw(pSubDisplay))
         {

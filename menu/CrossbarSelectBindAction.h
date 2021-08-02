@@ -35,7 +35,7 @@ private:
 
     void HandleConfirm() override;
     void HandleButtonUp() override;
-    static FontMenuState GetInitialState(IAshitaCore* pAshitaCore, CrossbarActionType type, int skill, const char* buttonName);
+    static FontMenuState GetInitialState(IAshitaCore* pAshitaCore, CrossbarActionType type, int skill, const char* buttonName, bool useSync);
 
     void HandleSubMenu(FontMenuCompletionData_t data) override;
     void HandleButtonLeft() override;

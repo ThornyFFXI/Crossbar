@@ -23,6 +23,7 @@ private:
 	CrossbarSettings* pSettings;
 
 	CrossbarMacroSet* pMacros[6];
+    MacroMode mLastSingleMode;
 
 public:
 	CrossbarCanvas(IAshitaCore* pAshitaCore, CrossbarSettings* pSettings, CrossbarBindings* pBindings);

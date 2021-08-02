@@ -437,7 +437,11 @@ CrossbarSettings::CrossbarSettings(IAshitaCore* pAshitaCore, const char* playerN
 				else if (_stricmp(subNode->name(), "triggerduration") == 0)
 					mConfig.TriggerDuration = atoi(subNode->value());
 				else if (_stricmp(subNode->name(), "useplaystationconfirm") == 0)
-					mConfig.UsePlaystationConfirm = (_stricmp(subNode->value(), "false") != 0);
+                    mConfig.UsePlaystationConfirm = (_stricmp(subNode->value(), "false") != 0);
+                else if (_stricmp(subNode->name(), "uselevelsync") == 0)
+                    mConfig.UseLevelSync = (_stricmp(subNode->value(), "true") == 0);
+                else if (_stricmp(subNode->name(), "allowbuttonsinmenu") == 0)
+                    mInput.AllowButtonsInMenu = (_stricmp(subNode->value(), "true") == 0);
 				else if (_stricmp(subNode->name(), "hideunboundbuttons") == 0)
 					mConfig.HideEmptyIcons = (_stricmp(subNode->value(), "false") != 0);
 			}
@@ -577,7 +581,13 @@ void CrossbarSettings::WriteDefaultSettings(const char* path)
 		outStream << "    <triggerduration>400</triggerduration>\n";
 		outStream << "    \n";
 		outStream << "    <!--If enabled, will swap bottom and right buttons in binding menu.-->\n";
-		outStream << "    <useplaystationconfirm>false</useplaystationconfirm>\n";
+        outStream << "    <useplaystationconfirm>false</useplaystationconfirm>\n";
+        outStream << "    \n";
+        outStream << "    <!--If enabled, binding menu will populate actions based on your synced level instead of real level.-->\n";
+        outStream << "    <uselevelsync>false</uselevelsync>\n";
+        outStream << "    \n";
+        outStream << "    <!--NOT IMPLEMENTED YET: If enabled, controller input will be sent directly to game while game has a menu open.-->\n";
+        outStream << "    <allowbuttonsinmenu>false</allowbuttonsinmenu>\n";
 		outStream << "    \n";
 		outStream << "    <!--If enabled, will not render unbound button panels.-->\n";
 		outStream << "    <hideunboundbuttons>false</hideunboundbuttons>\n";

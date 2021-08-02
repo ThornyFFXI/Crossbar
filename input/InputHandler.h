@@ -53,6 +53,7 @@ public:
     InputHandler(Crossbar* pCrossbar);
 
     bool GetMenuActive();
+    bool GetGameMenuActive();
     void HandleButtons(InputData_t input);
     void HandleMenuCombo(InputData_t input);
     void HandleState(InputData_t input);

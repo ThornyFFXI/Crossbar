@@ -109,12 +109,14 @@ struct InputConfig_t
     int TapDuration;
     bool AllowDoubleTap;
     bool AllowPriority;
+    bool AllowButtonsInMenu;
 
     InputConfig_t()
         : MenuDuration(1200)
         , TapDuration(600)
         , AllowDoubleTap(false)
         , AllowPriority(false)
+        , AllowButtonsInMenu(false)
     {}
 };
 
@@ -134,6 +136,7 @@ struct CrossbarConfig_t
     int FadeAlpha;
     int TriggerDuration;
     bool UsePlaystationConfirm;
+    bool UseLevelSync;
 
     int MainPanelX;
     int MainPanelY;
@@ -162,6 +165,7 @@ struct CrossbarConfig_t
         , SubPanelY(-150)
         , BindMenuX(-1)
         , BindMenuY(80)
+        , UseLevelSync(false)
     {}
 };
 

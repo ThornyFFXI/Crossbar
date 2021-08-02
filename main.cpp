@@ -218,6 +218,10 @@ bool Crossbar::GetMenuActive()
 {
 	return (pMenu != NULL);
 }
+bool Crossbar::GetGameMenuActive()
+{
+    return false;
+}
 void Crossbar::HandleButtonPress(MacroButton button)
 {
 	if (button == MacroButton::ShoulderLeft)

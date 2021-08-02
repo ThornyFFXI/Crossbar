@@ -77,7 +77,7 @@ bool CrossbarSpellMacro::Draw(GdiDIB* pDIB)
         {
             try
             {
-                if (!pAshitaCore->GetMemoryManager()->GetPlayer()->HasSpell(pSpell->Id))
+                if (!pAshitaCore->GetMemoryManager()->GetPlayer()->HasSpell(pSpell->Index))
                 {
                     isBlocked = true;
                 }

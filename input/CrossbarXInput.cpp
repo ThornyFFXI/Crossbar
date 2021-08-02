@@ -75,6 +75,9 @@ bool CrossbarXInput::AttemptHook()
 DWORD CrossbarXInput::XInputGetState(DWORD dwUserIndex, XINPUT_STATE* pState)
 {
 	DWORD retValue = Real_XInputGetState(dwUserIndex, pState);
+    if (pInput->GetGameMenuActive())
+        return retValue;
+
 	HandleState(dwUserIndex, pState);
 	UpdateState(dwUserIndex, pState);
 	return retValue;

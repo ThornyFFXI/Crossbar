@@ -27,7 +27,7 @@ private:
     void HandleButtonUp() override;
     void HandleSubMenu(FontMenuCompletionData_t data) override;
 
-    static FontMenuState GetInitialState(IAshitaCore* pAshitaCore, const char* button);
+    static FontMenuState GetInitialState(IAshitaCore* pAshitaCore, const char* button, bool useSync);
 };
 
 #endif

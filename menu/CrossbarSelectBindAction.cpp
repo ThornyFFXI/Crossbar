@@ -1,14 +1,14 @@
 #include "CrossbarSelectBindAction.h"
 
 CrossbarSelectBindAction::CrossbarSelectBindAction(FontMenuBase* pMainMenu, CrossbarActionType type, const char* buttonName)
-	: FontMenuBase(pMainMenu, GetInitialState(pMainMenu->pAshitaCore, type, -1, buttonName))
+    : FontMenuBase(pMainMenu, GetInitialState(pMainMenu->pAshitaCore, type, -1, buttonName, pMainMenu->pSettings->mConfig.UseLevelSync))
 	, mType(type)
 	, mSkill(-1)
 {
 	strcpy_s(mButtonName, 256, buttonName);
 }
 CrossbarSelectBindAction::CrossbarSelectBindAction(FontMenuBase* pMainMenu, CrossbarActionType type, int skill, const char* buttonName)
-	: FontMenuBase(pMainMenu, GetInitialState(pMainMenu->pAshitaCore, type, skill, buttonName))
+    : FontMenuBase(pMainMenu, GetInitialState(pMainMenu->pAshitaCore, type, skill, buttonName, pMainMenu->pSettings->mConfig.UseLevelSync))
 	, mType(type)
 	, mSkill(skill)
 {
@@ -115,15 +115,21 @@ void CrossbarSelectBindAction::HandleButtonUp()
 		return;
 	}
 
-	mState = GetInitialState(pAshitaCore, mType, mSkill, mButtonName);
+	mState = GetInitialState(pAshitaCore, mType, mSkill, mButtonName, pSettings->mConfig.UseLevelSync);
 }
 
-FontMenuState CrossbarSelectBindAction::GetInitialState(IAshitaCore* pAshitaCore, CrossbarActionType type, int skill, const char* buttonName)
+FontMenuState CrossbarSelectBindAction::GetInitialState(IAshitaCore* pAshitaCore, CrossbarActionType type, int skill, const char* buttonName, bool useSync)
 {
 	int mainJob = pAshitaCore->GetMemoryManager()->GetPlayer()->GetMainJob();
-	int mainJobLevel = pAshitaCore->GetMemoryManager()->GetPlayer()->GetMainJobLevel();
+    int mainJobLevel = pAshitaCore->GetMemoryManager()->GetPlayer()->GetJobLevel(mainJob);
 	int subJob = pAshitaCore->GetMemoryManager()->GetPlayer()->GetSubJob();
-	int subJobLevel = pAshitaCore->GetMemoryManager()->GetPlayer()->GetSubJobLevel();
+    int subJobLevel  = pAshitaCore->GetMemoryManager()->GetPlayer()->GetJobLevel(subJob);
+
+	if (useSync)
+    {
+        mainJobLevel = pAshitaCore->GetMemoryManager()->GetPlayer()->GetMainJobLevel();
+        subJobLevel = pAshitaCore->GetMemoryManager()->GetPlayer()->GetSubJobLevel();
+    }
 
 	std::vector<FontMenuOption> options;
 	if (type == CrossbarActionType::Command)

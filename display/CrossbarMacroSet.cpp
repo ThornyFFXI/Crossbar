@@ -97,6 +97,13 @@ bool CrossbarMacroSet::Draw(GdiDIB* pDIB)
 
     return redraw;
 }
+void CrossbarMacroSet::ForceMacroRedraw()
+{
+    for (int x = 0; x < 8; x++)
+    {
+        pMacros[x]->mForceRedraw = true;
+    }
+}
 
 void CrossbarMacroSet::TriggerMacro(MacroButton button)
 {
