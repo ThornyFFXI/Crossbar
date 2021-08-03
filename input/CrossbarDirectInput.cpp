@@ -28,28 +28,24 @@ CrossbarDirectInput::CrossbarDirectInput(InputHandler* pInput)
 }
 CrossbarDirectInput::~CrossbarDirectInput()
 {
-	if (mHookActive)
-	{
-		int size = sizeof(intptr_t);
-		DWORD oldProtection;
-		DWORD tempProtection;
+    if (mHookActive)
+    {
+        int size = sizeof(intptr_t);
+        DWORD oldProtection;
+        DWORD tempProtection;
 
-		int offset = 9;
-		DWORD field = pvTable + (offset * sizeof(intptr_t));
-		VirtualProtect(reinterpret_cast<void*>(field), size, PAGE_EXECUTE_READWRITE, &oldProtection);
-		*(reinterpret_cast<DIGetDeviceState*>(field)) = Real_GetDeviceState;
-		VirtualProtect(reinterpret_cast<void*>(field), size, oldProtection, &tempProtection);
+        int offset  = 9;
+        DWORD field = pvTable + (offset * sizeof(intptr_t));
+        VirtualProtect(reinterpret_cast<void*>(field), size, PAGE_EXECUTE_READWRITE, &oldProtection);
+        *(reinterpret_cast<DIGetDeviceState*>(field)) = Real_GetDeviceState;
+        VirtualProtect(reinterpret_cast<void*>(field), size, oldProtection, &tempProtection);
 
-		offset = 10;
-		field = pvTable + (offset * sizeof(intptr_t));
-		VirtualProtect(reinterpret_cast<void*>(field), size, PAGE_EXECUTE_READWRITE, &oldProtection);
-		*(reinterpret_cast<DIGetDeviceData*>(field)) = Real_GetDeviceData;
-		VirtualProtect(reinterpret_cast<void*>(field), size, oldProtection, &tempProtection);
-	}
-	if (pDirectInput)
-	{
-		pDirectInput->Release();
-	}
+        offset = 10;
+        field  = pvTable + (offset * sizeof(intptr_t));
+        VirtualProtect(reinterpret_cast<void*>(field), size, PAGE_EXECUTE_READWRITE, &oldProtection);
+        *(reinterpret_cast<DIGetDeviceData*>(field)) = Real_GetDeviceData;
+        VirtualProtect(reinterpret_cast<void*>(field), size, oldProtection, &tempProtection);
+    }
 }
 
 bool CrossbarDirectInput::AttemptHook()
@@ -132,10 +128,10 @@ void CrossbarDirectInput::HandleFoundDevice(GUID guid)
 			VirtualProtect(reinterpret_cast<void*>(field), size, oldProtection, &tempProtection);
 
 			mHookActive = true;
-			pDirectInputDevice->Release();
-			pDirectInputDevice = NULL;
-			pDirectInput->Release();
-			pDirectInput = NULL;
+			if (pDirectInputDevice)
+			{
+                pDirectInputDevice->Release();
+			}
 		}
 	}
 }
