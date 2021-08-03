@@ -34,6 +34,7 @@ private:
     char mCurrentName[256];
     MacroMode mCurrentMode;
     bool mZoning;
+    DWORD pGameMenu;
 
 public:
 
@@ -55,7 +56,7 @@ public:
     }
     double GetVersion(void) const override
     {
-        return 1.05f;
+        return 1.06f;
     }
     int32_t GetPriority(void) const override
     {

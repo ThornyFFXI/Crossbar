@@ -193,6 +193,9 @@ void ResonationTracker::HandleActionPacket(uint32_t size, uint8_t* data)
     if (actionType == 4) //Spell finish
     {
         uint32_t actionId = Ashita::BinaryData::UnpackBitsBE((uint8_t*)data, 0, 86, 10);
+        if (actionId == 0)
+            return;
+
         uint32_t actorId = Read32(data, 5);
         uint16_t buffId = 0;
         auto bitOffset = 150;
@@ -261,6 +264,8 @@ void ResonationTracker::HandleActionPacket(uint32_t size, uint8_t* data)
             else
             {
                 ISpell* pSpell = pAshitaCore->GetResourceManager()->GetSpellById(actionId);
+                if (pSpell == NULL)
+                    return;
                 SkillchainAttributes_t skillchain;
                 skillchain.Attribute[0] = SkillchainIndex::None;
                 if (pSpell->Skill == 43)

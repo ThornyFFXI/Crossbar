@@ -37,7 +37,8 @@ bool Crossbar::Initialize(IAshitaCore* core, ILogManager* logger, const uint32_t
     MODULEINFO mod = {0};
     ::GetModuleInformation(::GetCurrentProcess(), ::GetModuleHandle("FFXiMain.dll"), &mod, sizeof(MODULEINFO));
     CrossbarItemMacro::pRealTime = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "8B0D????????8B410C8B49108D04808D04808D04808D04C1C3", 2, 0);
-    
+	pGameMenu = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "8B480C85C974??8B510885D274??3B05", 16, 0);
+
 	if (m_AshitaCore->GetMemoryManager()->GetParty()->GetMemberIsActive(0))
 	{
 		strcpy_s(mCurrentName, 256, m_AshitaCore->GetMemoryManager()->GetParty()->GetMemberName(0));
@@ -220,7 +221,18 @@ bool Crossbar::GetMenuActive()
 }
 bool Crossbar::GetGameMenuActive()
 {
-    return false;
+    if (pGameMenu == NULL)
+        return false;
+
+    DWORD pSubMenu = Read32(pGameMenu, 0);
+    pSubMenu       = Read32(pSubMenu, 0);
+    if (pSubMenu == NULL)
+        return false;
+
+    DWORD pMenuHeader = Read32(pSubMenu, 4);
+    char buffer[17]   = {0};
+    memcpy(buffer, (const char*)(pMenuHeader + 0x46), 16);
+    return ((strstr(buffer, "playermo") == 0) && (strstr(buffer, "inline") == 0));
 }
 void Crossbar::HandleButtonPress(MacroButton button)
 {
