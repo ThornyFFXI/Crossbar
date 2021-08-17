@@ -91,7 +91,7 @@ bool Crossbar::HandleIncomingPacket(uint16_t id, uint32_t size, const uint8_t* d
 	{
 		char newName[256] = { 0 };
 		memcpy(newName, data + 0x84, 16);
-		uint32_t newId = Read32(data, 0);
+		uint32_t newId = Read32(data, 4);
 		CrossbarWeaponskillMacro::pResonation->Clear();
 		if ((mCurrentId != newId) || (strcmp(mCurrentName, newName) != 0))
 		{
