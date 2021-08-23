@@ -544,7 +544,7 @@ void CrossbarSettings::WriteDefaultSettings(const char* path)
 		outStream << "    \n";
 
 		outStream << "    <!--The length of time, in milliseconds, you are allotted to second-tap L2 or R2 when allowdoubletap is enabled.-->\n";
-		outStream << "    <taptimeout>600</taptimeout>\n";
+		outStream << "    <taptimeout>300</taptimeout>\n";
 		outStream << "    \n";
 
 		outStream << "    <!--The length of time, in milliseconds, you have to hold L1+L2+R1+R2 to open/close binding menu.-->\n";
@@ -586,7 +586,7 @@ void CrossbarSettings::WriteDefaultSettings(const char* path)
         outStream << "    <!--If enabled, binding menu will populate actions based on your synced level instead of real level.-->\n";
         outStream << "    <uselevelsync>false</uselevelsync>\n";
         outStream << "    \n";
-        outStream << "    <!--NOT IMPLEMENTED YET: If enabled, controller input will be sent directly to game while game has a menu open.-->\n";
+        outStream << "    <!--If enabled, controller input will be sent directly to game while game has a menu open.-->\n";
         outStream << "    <allowbuttonsinmenu>false</allowbuttonsinmenu>\n";
 		outStream << "    \n";
 		outStream << "    <!--If enabled, will not render unbound button panels.-->\n";

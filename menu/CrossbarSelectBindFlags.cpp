@@ -131,10 +131,7 @@ void CrossbarSelectBindFlags::ApplySettings()
 {
 	strcpy_s(mMacro.IconCommand, 256, mState.mOptions[0].GetValue());
 	strcpy_s(mMacro.IconText, 256, mState.mOptions[1].GetValue());
-	if (strcmp(mState.mOptions[2].GetValue(), "DEFAULT") != 0)
-	{
-		sprintf_s(mMacro.IconFile, 256, "%sresources//crossbar//%s", pAshitaCore->GetInstallPath(), mState.mOptions[2].GetValue());
-	}
+    strcpy_s(mMacro.IconFile, 256, mState.mOptions[2].GetValue());
 	mMacro.DrawCost = GetDrawSetting(mState.mOptions[3].GetValue());
 	mMacro.DrawCross = GetDrawSetting(mState.mOptions[4].GetValue());
 	mMacro.DrawFade = GetDrawSetting(mState.mOptions[5].GetValue());

@@ -34,19 +34,16 @@ void InputHandler::HandleState(InputData_t input)
 MacroMode InputHandler::GetMacroMode(InputData_t input)
 {
 	if (input.LeftTrigger)
-	{
-		//We know this is a fresh hit, not just held.
-		if (!mLastState.LeftTrigger)
+    {
+        //Only process taps and shoulder priority on a fresh hit from no triggers.
+        if ((!mLastState.LeftTrigger) && (!mLastState.RightTrigger))
 		{
 			if (std::chrono::steady_clock::now() < mLeftTapTimer)
 			{
 				mLeftTap = true;
 			}
 			mLeftTapTimer = std::chrono::steady_clock::now() + std::chrono::milliseconds(mConfig.TapDuration);
-			if (!mLastState.RightTrigger)
-			{
-				mRightShoulderFirst = false;
-			}
+			mRightShoulderFirst = false;
 		}
 	}
 	else
@@ -56,19 +53,16 @@ MacroMode InputHandler::GetMacroMode(InputData_t input)
 
 	if (input.RightTrigger)
 	{
-		//We know this is a fresh hit, not just held.
-		if (!mLastState.RightTrigger)
+		//Only process taps and shoulder priority on a fresh hit from no triggers.
+        if ((!mLastState.LeftTrigger) && (!mLastState.RightTrigger))
 		{
 			if (std::chrono::steady_clock::now() < mRightTapTimer)
 			{
 				mRightTap = true;
 			}
 			mRightTapTimer = std::chrono::steady_clock::now() + std::chrono::milliseconds(mConfig.TapDuration);
-			if (!input.LeftTrigger)
-			{
-				mRightShoulderFirst = true;
-			}
-		}
+			mRightShoulderFirst = true;
+        }
 	}
 	else
 	{
@@ -80,6 +74,11 @@ MacroMode InputHandler::GetMacroMode(InputData_t input)
 	{
 		if (input.RightTrigger)
 		{
+			//Entering double trigger mode cancels all taps.
+            mLeftTap = false;
+            mRightTap     = false;
+            mLeftTapTimer = std::chrono::steady_clock::now() - std::chrono::milliseconds(1);
+            mRightTapTimer = std::chrono::steady_clock::now() - std::chrono::milliseconds(1);
 			if ((mConfig.AllowPriority) && (mRightShoulderFirst))
 				return MacroMode::BothTriggersRT;
 			else
