@@ -35,6 +35,7 @@ private:
     MacroMode mCurrentMode;
     bool mZoning;
     DWORD pGameMenu;
+    DWORD pMenuHelp;
 
 public:
 
@@ -56,7 +57,7 @@ public:
     }
     double GetVersion(void) const override
     {
-        return 1.10f;
+        return 1.11f;
     }
     int32_t GetPriority(void) const override
     {
@@ -72,6 +73,8 @@ public:
     
     bool GetMenuActive();
     bool GetGameMenuActive();
+    std::string GetMenuName();
+    std::string GetMenuHelpText();
     void HandleButtonPress(MacroButton button);
     void HandleMenuCombo();
     void SetMacroMode(MacroMode mode);

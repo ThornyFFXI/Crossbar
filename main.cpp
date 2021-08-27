@@ -37,7 +37,8 @@ bool Crossbar::Initialize(IAshitaCore* core, ILogManager* logger, const uint32_t
     MODULEINFO mod = {0};
     ::GetModuleInformation(::GetCurrentProcess(), ::GetModuleHandle("FFXiMain.dll"), &mod, sizeof(MODULEINFO));
     CrossbarItemMacro::pRealTime = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "8B0D????????8B410C8B49108D04808D04808D04808D04C1C3", 2, 0);
-	pGameMenu = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "8B480C85C974??8B510885D274??3B05", 16, 0);
+    pGameMenu                    = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "8B480C85C974??8B510885D274??3B05", 16, 0);
+    pMenuHelp                    = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "5350E8????????5F885D??5E5D5BC3A1????????85C0????538BCDE8", 16, 0);
 
 	if (m_AshitaCore->GetMemoryManager()->GetParty()->GetMemberIsActive(0))
 	{
@@ -167,14 +168,25 @@ void Crossbar::Direct3DPresent(const RECT* pSourceRect, const RECT* pDestRect, H
 	}
 
 	
-	bool draw   = true;
+	bool hide   = false;
     int myIndex = m_AshitaCore->GetMemoryManager()->GetParty()->GetMemberTargetIndex(0);
-    if ((mZoning)
-		|| (myIndex < 1)
-		|| (m_AshitaCore->GetMemoryManager()->GetEntity()->GetRawEntity(myIndex) == 0)
-		|| ((m_AshitaCore->GetMemoryManager()->GetEntity()->GetRenderFlags0(myIndex) & 0x200) == 0)
-		|| ((m_AshitaCore->GetMemoryManager()->GetEntity()->GetRenderFlags0(myIndex) & 0x4000) != 0)
-		|| (m_AshitaCore->GetMemoryManager()->GetEntity()->GetStatus(myIndex) == 4))
+    if ((mZoning) || (myIndex < 1) || (m_AshitaCore->GetMemoryManager()->GetEntity()->GetRawEntity(myIndex) == 0))
+    {
+        if (pSettings->mConfig.HideWhileZoning)
+        {
+            hide = true;
+        }
+    }
+    else if ((pSettings->mConfig.HideWhileCutscene) && (m_AshitaCore->GetMemoryManager()->GetEntity()->GetStatus(myIndex) == 4))
+    {
+        hide = true;
+    }
+    if ((pSettings->mConfig.HideWhileMap) && (GetMenuName().find("map") != std::string::npos))
+    {
+        hide = true;
+    }
+
+	if (hide)
     {
         if (pCanvas)
         {
@@ -221,18 +233,45 @@ bool Crossbar::GetMenuActive()
 }
 bool Crossbar::GetGameMenuActive()
 {
+	std::string menuName = GetMenuName();
+    if (menuName == "")
+        return false;
+    if ((menuName.find("playermo") != std::string::npos) ||(menuName.find("inline") != std::string::npos))
+		return false;
+    return true;
+}
+std::string Crossbar::GetMenuName()
+{
     if (pGameMenu == NULL)
-        return false;
-
+        return "";
     DWORD pSubMenu = Read32(pGameMenu, 0);
-    pSubMenu       = Read32(pSubMenu, 0);
     if (pSubMenu == NULL)
-        return false;
-
+        return "";
+    pSubMenu = Read32(pSubMenu, 0);
+    if (pSubMenu == NULL)
+        return "";
     DWORD pMenuHeader = Read32(pSubMenu, 4);
+    if (pMenuHeader == NULL)
+        return "";
     char buffer[17]   = {0};
     memcpy(buffer, (const char*)(pMenuHeader + 0x46), 16);
-    return ((strstr(buffer, "playermo") == 0) && (strstr(buffer, "inline") == 0));
+    return std::string(buffer);
+}
+std::string Crossbar::GetMenuHelpText()
+{
+    if (pMenuHelp == NULL)
+        return "";
+    DWORD offset = Read32(pMenuHelp, 0);
+    if (offset == NULL)
+        return "";
+    offset = Read32(offset, 0);
+    if (offset == NULL)
+        return "";
+    offset       = Read32(offset, 0xEC);
+    if (offset == NULL)
+        return "";
+    else
+        return std::string((const char*)offset);
 }
 void Crossbar::HandleButtonPress(MacroButton button)
 {

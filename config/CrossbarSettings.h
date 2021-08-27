@@ -138,6 +138,10 @@ struct CrossbarConfig_t
     bool UsePlaystationConfirm;
     bool UseLevelSync;
 
+    bool HideWhileZoning;
+    bool HideWhileCutscene;
+    bool HideWhileMap;
+
     int MainPanelX;
     int MainPanelY;
     int SubPanelX;
@@ -166,6 +170,9 @@ struct CrossbarConfig_t
         , BindMenuX(-1)
         , BindMenuY(80)
         , UseLevelSync(false)
+        , HideWhileZoning(true)
+        , HideWhileCutscene(true)
+        , HideWhileMap(true)
     {}
 };
 

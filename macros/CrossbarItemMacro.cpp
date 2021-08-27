@@ -48,6 +48,9 @@ int CrossbarItemMacro::GetItemCount()
     int count              = 0;
     for (int x = 1; x <= pInventory->GetContainerCountMax(0); x++)
     {
+        if (x == 81)
+            break;
+
         Ashita::FFXI::item_t* item = pInventory->GetContainerItem(0, x);
         if ((item != NULL) && (item->Id == pItem->Id))
             count += item->Count;

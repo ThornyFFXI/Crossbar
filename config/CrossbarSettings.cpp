@@ -443,7 +443,13 @@ CrossbarSettings::CrossbarSettings(IAshitaCore* pAshitaCore, const char* playerN
                 else if (_stricmp(subNode->name(), "allowbuttonsinmenu") == 0)
                     mInput.AllowButtonsInMenu = (_stricmp(subNode->value(), "true") == 0);
 				else if (_stricmp(subNode->name(), "hideunboundbuttons") == 0)
-					mConfig.HideEmptyIcons = (_stricmp(subNode->value(), "false") != 0);
+                    mConfig.HideEmptyIcons = (_stricmp(subNode->value(), "false") != 0);
+                else if (_stricmp(subNode->name(), "hidewhilezoning") == 0)
+                    mConfig.HideWhileZoning = (_stricmp(subNode->value(), "false") != 0);
+                else if (_stricmp(subNode->name(), "hidewhilecutscene") == 0)
+                    mConfig.HideWhileCutscene = (_stricmp(subNode->value(), "false") != 0);
+                else if (_stricmp(subNode->name(), "hidewhilemap") == 0)
+                    mConfig.HideWhileMap = (_stricmp(subNode->value(), "false") != 0);
 			}
 		}
 		delete xmlBuffer;
@@ -590,7 +596,16 @@ void CrossbarSettings::WriteDefaultSettings(const char* path)
         outStream << "    <allowbuttonsinmenu>false</allowbuttonsinmenu>\n";
 		outStream << "    \n";
 		outStream << "    <!--If enabled, will not render unbound button panels.-->\n";
-		outStream << "    <hideunboundbuttons>false</hideunboundbuttons>\n";
+        outStream << "    <hideunboundbuttons>false</hideunboundbuttons>\n";
+        outStream << "    \n";
+        outStream << "    <!--If enabled, will hide crossbar while zoning.-->\n";
+        outStream << "    <hidewhilezoning>true</hidewhilezoning>\n";
+        outStream << "    \n";
+        outStream << "    <!--If enabled, will hide crossbar while in cutscenes.-->\n";
+        outStream << "    <hidewhilecutscene>true</hidewhilecutscene>\n";
+        outStream << "    \n";
+        outStream << "    <!--If enabled, will hide crossbar while in map.-->\n";
+        outStream << "    <hidewhilemap>true</hidewhilemap>\n";
 		outStream << "</crossbarsettings>";
 		outStream.close();
 	}
