@@ -40,8 +40,8 @@ struct SingleMacroInfo_t
     DrawSetting DrawSkillchain;
     DrawSetting DrawTrigger;
 
-    SingleMacroInfo_t::SingleMacroInfo_t();
-    SingleMacroInfo_t::SingleMacroInfo_t(IAshitaCore* pAshitaCore, CrossbarSettings* pSettings, xml_node<>* baseNode);
+    SingleMacroInfo_t();
+    SingleMacroInfo_t(IAshitaCore* pAshitaCore, CrossbarSettings* pSettings, xml_node<>* baseNode);
     void BooleanToTag(std::ofstream* stream, const char* field, int depth, DrawSetting setting);
     void Write(std::ofstream* stream, int depth);
 };

@@ -137,7 +137,13 @@ void CrossbarDirectInput::HandleFoundDevice(GUID guid)
 			if (pDirectInputDevice)
 			{
                 pDirectInputDevice->Release();
-			}
+                pDirectInputDevice = nullptr;
+            }
+            if (pDirectInput)
+            {
+                pDirectInput->Release();
+                pDirectInput = nullptr;
+            }
 		}
 	}
 }
