@@ -46,6 +46,12 @@ CrossbarDirectInput::~CrossbarDirectInput()
         *(reinterpret_cast<DIGetDeviceData*>(field)) = Real_GetDeviceData;
         VirtualProtect(reinterpret_cast<void*>(field), size, oldProtection, &tempProtection);
     }
+
+	if (pDirectInput)
+	{
+		pDirectInput->Release();
+		pDirectInput = nullptr;
+	}
 }
 
 bool CrossbarDirectInput::AttemptHook()
