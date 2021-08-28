@@ -47,11 +47,11 @@ CrossbarDirectInput::~CrossbarDirectInput()
         VirtualProtect(reinterpret_cast<void*>(field), size, oldProtection, &tempProtection);
     }
 
-	if (pDirectInput)
-	{
-		pDirectInput->Release();
-		pDirectInput = nullptr;
-	}
+    if (pDirectInput)
+    {
+        pDirectInput->Release();
+        pDirectInput = nullptr;
+    }
 }
 
 bool CrossbarDirectInput::AttemptHook()
