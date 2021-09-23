@@ -71,7 +71,7 @@ bool CrossbarAbilityMacro::Draw(GdiDIB* pDIB)
     {
         if (mMacroSettings.DrawFade == DrawSetting::Draw)
         {
-            if (pAshitaCore->GetMemoryManager()->GetParty()->GetMemberTP(0) < pAbility->TPCost)
+            if (static_cast<int16_t>(pAshitaCore->GetMemoryManager()->GetParty()->GetMemberTP(0)) < pAbility->TPCost)
             {
                 isTransparent = true;
             }
