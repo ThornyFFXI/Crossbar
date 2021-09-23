@@ -5,23 +5,23 @@
 #include <Windows.h>
 #include <atlbase.h>
 #include <gdiplus.h>
-#pragma comment (lib, "Gdiplus.lib")
+#pragma comment(lib, "Gdiplus.lib")
 #include <filesystem>
 #include <fstream>
 
-#define RBUFP(p,pos) (((unsigned char*)(p)) + (pos))
-#define Read8(p,pos) (*(unsigned char*)RBUFP((p),(pos)))
-#define Read16(p,pos) (*(unsigned short*)RBUFP((p),(pos)))
-#define Read32(p,pos) (*(unsigned int*)RBUFP((p),(pos)))
-#define Read64(p,pos) (*(unsigned long*)RBUFP((p),(pos)))
-#define ReadFloat(p,pos) (*(float*)RBUFP((p),(pos)))
+#define RBUFP(p, pos) (((unsigned char*)(p)) + (pos))
+#define Read8(p, pos) (*(unsigned char*)RBUFP((p), (pos)))
+#define Read16(p, pos) (*(unsigned short*)RBUFP((p), (pos)))
+#define Read32(p, pos) (*(unsigned int*)RBUFP((p), (pos)))
+#define Read64(p, pos) (*(unsigned long*)RBUFP((p), (pos)))
+#define ReadFloat(p, pos) (*(float*)RBUFP((p), (pos)))
 
-#define WBUFP(p,pos) (((unsigned char*)(p)) + (pos))
-#define Write8(p,pos) (*(unsigned char*)WBUFP((p),(pos)))
-#define Write16(p,pos) (*(unsigned short*)WBUFP((p),(pos)))
-#define Write32(p,pos) (*(unsigned int*)WBUFP((p),(pos)))
-#define Write64(p,pos) (*(unsigned long*)WBUFP((p),(pos)))
-#define WriteFloat(p,pos) (*(float*)WBUFP((p),(pos)))
+#define WBUFP(p, pos) (((unsigned char*)(p)) + (pos))
+#define Write8(p, pos) (*(unsigned char*)WBUFP((p), (pos)))
+#define Write16(p, pos) (*(unsigned short*)WBUFP((p), (pos)))
+#define Write32(p, pos) (*(unsigned int*)WBUFP((p), (pos)))
+#define Write64(p, pos) (*(unsigned long*)WBUFP((p), (pos)))
+#define WriteFloat(p, pos) (*(float*)WBUFP((p), (pos)))
 
 class Crossbar;
 class CrossbarXInput;
@@ -30,33 +30,37 @@ class InputHandler;
 
 enum class MacroButton
 {
-    DpadUp = 0,
-    DpadRight = 1,
-    DpadDown = 2,
-    DpadLeft = 3,
-    ButtonUp = 4,
-    ButtonRight = 5,
-    ButtonDown = 6,
-    ButtonLeft = 7,
-    ShoulderLeft = 8,
+    DpadUp        = 0,
+    DpadRight     = 1,
+    DpadDown      = 2,
+    DpadLeft      = 3,
+    ButtonUp      = 4,
+    ButtonRight   = 5,
+    ButtonDown    = 6,
+    ButtonLeft    = 7,
+    ShoulderLeft  = 8,
     ShoulderRight = 9,
-    Confirm = 10,
-    Cancel = 11
+    Confirm       = 10,
+    Cancel        = 11
 };
 enum class MacroMode
 {
-    LeftTrigger = 0,
-    RightTrigger = 1,
+    LeftTrigger    = 0,
+    RightTrigger   = 1,
     BothTriggersLT = 2,
     BothTriggersRT = 3,
-    LeftTriggerDT = 4,
+    LeftTriggerDT  = 4,
     RightTriggerDT = 5,
-    NoTrigger = 6
+    NoTrigger      = 6
 };
 
-#define SAFE_DELETE(a) if (a != NULL) delete a
-#define SN_TO_INT(a,b) if (_stricmp(subNode->name(), a) == 0) b = atoi(subNode->value())
-#define E_SN_TO_INT(a,b) else if (_stricmp(subNode->name(), a) == 0) b = atoi(subNode->value())
+#define SAFE_DELETE(a) \
+    if (a != NULL)     \
+    delete a
+#define SN_TO_INT(a, b)                    \
+    if (_stricmp(subNode->name(), a) == 0) \
+    b = atoi(subNode->value())
+#define E_SN_TO_INT(a, b) else if (_stricmp(subNode->name(), a) == 0) b = atoi(subNode->value())
 
 using namespace rapidxml;
 
@@ -67,7 +71,7 @@ public:
     {
         std::string makeDirectory(path);
         size_t nextDirectory = makeDirectory.find_first_of("\\/");
-        nextDirectory = makeDirectory.find_first_of("\\/", nextDirectory + 1);
+        nextDirectory        = makeDirectory.find_first_of("\\/", nextDirectory + 1);
         while (nextDirectory != std::string::npos)
         {
             std::string currentDirectory = makeDirectory.substr(0, nextDirectory + 1);
@@ -84,7 +88,7 @@ public:
         }
 
         long size = inputStream.tellg();
-        *buffer = new char[size + 1];
+        *buffer   = new char[size + 1];
         inputStream.seekg(0, std::ios::beg);
         inputStream.read(*buffer, size);
         (*buffer)[size] = '\0';
@@ -96,13 +100,13 @@ public:
         }
         catch (const parse_error& e)
         {
-            delete* docBuffer;
+            delete *docBuffer;
             delete[] * buffer;
             return false;
         }
         catch (...)
         {
-            delete* docBuffer;
+            delete *docBuffer;
             delete[] * buffer;
             return false;
         }
@@ -110,17 +114,32 @@ public:
         return true;
     }
 
-    static std::string Escape(const char* input) {
+    static std::string Escape(const char* input)
+    {
         int len = strlen(input);
         std::string buffer;
-        for (size_t pos = 0; pos < len; ++pos) {
-            switch (input[pos]) {
-            case '&':  buffer.append("&amp;");       break;
-            case '\"': buffer.append("&quot;");      break;
-            case '\'': buffer.append("&apos;");      break;
-            case '<':  buffer.append("&lt;");        break;
-            case '>':  buffer.append("&gt;");        break;
-            default:   buffer.push_back(input[pos]); break;
+        for (size_t pos = 0; pos < len; ++pos)
+        {
+            switch (input[pos])
+            {
+                case '&':
+                    buffer.append("&amp;");
+                    break;
+                case '\"':
+                    buffer.append("&quot;");
+                    break;
+                case '\'':
+                    buffer.append("&apos;");
+                    break;
+                case '<':
+                    buffer.append("&lt;");
+                    break;
+                case '>':
+                    buffer.append("&gt;");
+                    break;
+                default:
+                    buffer.push_back(input[pos]);
+                    break;
             }
         }
         return buffer;
@@ -141,9 +160,9 @@ public:
     static Gdiplus::Color ToColor(xml_node<>* baseNode)
     {
         int alpha = 255;
-        int red = 255;
+        int red   = 255;
         int green = 255;
-        int blue = 255;
+        int blue  = 255;
 
         for (xml_node<>* subNode = baseNode->first_node(); subNode; subNode = subNode->next_sibling())
         {
@@ -163,9 +182,9 @@ public:
         for (xml_node<>* subNode = baseNode->first_node(); subNode; subNode = subNode->next_sibling())
         {
             SN_TO_INT("width", width);
-else if (_stricmp(subNode->name(), "color") == 0)
+            else if (_stricmp(subNode->name(), "color") == 0)
             {
-            color = ToColor(subNode);
+                color = ToColor(subNode);
             }
         }
         return new Gdiplus::Pen(color, width);
@@ -274,7 +293,7 @@ public:
 
     GDITextElementInfo()
     {
-        Draw = false;
+        Draw  = false;
         pFont = NULL;
     }
     GDITextElementInfo(xml_node<>* baseNode)

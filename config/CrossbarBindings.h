@@ -21,8 +21,8 @@ enum class IconType
 enum class DrawSetting
 {
     DontDraw = 0,
-    Draw = 1,
-    Default = 2
+    Draw     = 1,
+    Default  = 2
 };
 struct SingleMacroInfo_t
 {

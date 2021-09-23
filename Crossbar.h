@@ -38,7 +38,6 @@ private:
     DWORD pMenuHelp;
 
 public:
-
     const char* GetName(void) const override
     {
         return "Crossbar";
@@ -57,7 +56,7 @@ public:
     }
     double GetVersion(void) const override
     {
-        return 1.12f;
+        return 1.13f;
     }
     int32_t GetPriority(void) const override
     {
@@ -70,7 +69,7 @@ public:
 
     bool Initialize(IAshitaCore* core, ILogManager* logger, const uint32_t id) override;
     void Release(void) override;
-    
+
     bool GetMenuActive();
     bool GetGameMenuActive();
     std::string GetMenuName();
@@ -80,14 +79,14 @@ public:
     void SetMacroMode(MacroMode mode);
 
     // Event Callbacks: ChatManager
-    bool HandleCommand(int32_t mode, const char* command, bool injected) override;	
+    bool HandleCommand(int32_t mode, const char* command, bool injected) override;
 
     // Event Callbacks: PacketManager
-    bool HandleIncomingPacket(uint16_t id, uint32_t size, const uint8_t* data, uint8_t* modified, uint32_t sizeChunk, const uint8_t* dataChunk, bool injected, bool blocked) override;	
+    bool HandleIncomingPacket(uint16_t id, uint32_t size, const uint8_t* data, uint8_t* modified, uint32_t sizeChunk, const uint8_t* dataChunk, bool injected, bool blocked) override;
     bool HandleOutgoingPacket(uint16_t id, uint32_t size, const uint8_t* data, uint8_t* modified, uint32_t sizeChunk, const uint8_t* dataChunk, bool injected, bool blocked) override;
-	
+
     // Event Callbacks: Direct3D
-    bool Direct3DInitialize(IDirect3DDevice8* device) override;	
+    bool Direct3DInitialize(IDirect3DDevice8* device) override;
     void Direct3DPresent(const RECT* pSourceRect, const RECT* pDestRect, HWND hDestWindowOverride, const RGNDATA* pDirtyRegion) override;
 
     void InitializeCrossbar();
