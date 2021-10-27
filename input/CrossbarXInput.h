@@ -20,6 +20,7 @@ private:
 public:
     CrossbarXInput(InputHandler* pInput);
     ~CrossbarXInput();
+    bool GetHookActive();
     bool AttemptHook();
     DWORD XInputGetState(DWORD dwUserIndex, XINPUT_STATE* pState);
     void HandleState(DWORD dwUserIndex, XINPUT_STATE* pState);

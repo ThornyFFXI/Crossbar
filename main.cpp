@@ -25,9 +25,9 @@ bool Crossbar::Initialize(IAshitaCore* core, ILogManager* logger, const uint32_t
     Gdiplus::GdiplusStartupInput gdiplusStartupInput;
     Gdiplus::GdiplusStartup(&mGDIToken, &gdiplusStartupInput, NULL);
     pInput                                = new InputHandler(this);
-    pDirectInput                          = new CrossbarDirectInput(pInput);
-    pXInput                               = new CrossbarXInput(pInput);
     CrossbarWeaponskillMacro::pResonation = new ResonationTracker(m_AshitaCore);
+    pDirectInput                          = NULL;
+    pXInput                               = NULL;
     pMenu                                 = NULL;
     pCanvas                               = NULL;
     pBindings                             = NULL;
@@ -72,6 +72,19 @@ bool Crossbar::HandleCommand(int32_t mode, const char* command, bool injected)
         {
             pMenu->ReceiveText(command + 5);
         }
+        return true;
+    }
+    if (_stricmp(command, "/crossbar reload") == 0)
+    {
+        if ((mCurrentId < 1) || (mCurrentJob < 1) || (strlen(mCurrentName) < 3))
+        {
+            m_AshitaCore->GetChatManager()->Writef(0, false, "%s%s", Ashita::Chat::Header("Crossbar").c_str(), Ashita::Chat::Error("Id, Name, or Job missing.  Cannot reload.").c_str());
+        }
+        else
+        {
+            InitializeCrossbar();
+        }
+
         return true;
     }
     return false;
@@ -152,18 +165,21 @@ void Crossbar::Direct3DPresent(const RECT* pSourceRect, const RECT* pDestRect, H
     UNREFERENCED_PARAMETER(hDestWindowOverride);
     UNREFERENCED_PARAMETER(pDirtyRegion);
 
+    if (pSettings == nullptr)
+        return;
+
     if (pDirectInput)
     {
         if (pDirectInput->AttemptHook())
         {
-            m_AshitaCore->GetChatManager()->Write(0, false, "Successfully hooked DirectInput.");
+            m_AshitaCore->GetChatManager()->Writef(0, false, "%s%s", Ashita::Chat::Header("Crossbar").c_str(), Ashita::Chat::Message("Hooked DirectInput!").c_str());
         }
     }
     if (pXInput)
     {
         if (pXInput->AttemptHook())
         {
-            m_AshitaCore->GetChatManager()->Write(0, false, "Successfully hooked XInput.");
+            m_AshitaCore->GetChatManager()->Writef(0, false, "%s%s", Ashita::Chat::Header("Crossbar").c_str(), Ashita::Chat::Message("Hooked XInput!").c_str());
         }
     }
 
@@ -355,8 +371,7 @@ void Crossbar::HandleMenuCombo()
 {
     if (pMenu)
     {
-        delete pMenu;
-        pMenu = NULL;
+        SAFE_DELETE(pMenu);
     }
     else
     {
@@ -372,22 +387,48 @@ void Crossbar::SetMacroMode(MacroMode mode)
 void Crossbar::InitializeCrossbar()
 {
     SAFE_DELETE(pMenu);
-    pMenu = NULL;
     SAFE_DELETE(pCanvas);
-    pCanvas = NULL;
     SAFE_DELETE(pBindings);
-    pBindings = NULL;
     SAFE_DELETE(pSettings);
-    pSettings = NULL;
 
     pSettings = new CrossbarSettings(m_AshitaCore, mCurrentName, mCurrentId);
     if (!pSettings->mIsLoaded)
     {
-        m_AshitaCore->GetChatManager()->Write(0, false, "Crossbar: Failed to load theme.");
-        delete pSettings;
-        pSettings = NULL;
+        SAFE_DELETE(pDirectInput);
+        SAFE_DELETE(pXInput);
+        m_AshitaCore->GetChatManager()->Writef(0, false, "%s%s", Ashita::Chat::Header("Crossbar").c_str(), Ashita::Chat::Error("Failed to load theme.  Crossbar disabled.").c_str());
+        SAFE_DELETE(pSettings);
         return;
     }
+
+    if (pSettings->mInput.EnableDInput && (pDirectInput == nullptr))
+    {
+        pDirectInput = new CrossbarDirectInput(pInput);
+    }
+    else if (!pSettings->mInput.EnableDInput && (pDirectInput != nullptr))
+    {
+        bool active = pDirectInput->GetHookActive();
+        SAFE_DELETE(pDirectInput);
+        if (active)
+        {
+            m_AshitaCore->GetChatManager()->Writef(0, false, "%s%s", Ashita::Chat::Header("Crossbar").c_str(), Ashita::Chat::Message("Unhooked DirectInput!").c_str());
+        }
+    }
+
+    if (pSettings->mInput.EnableXInput && (pXInput == nullptr))
+    {
+        pXInput = new CrossbarXInput(pInput);
+    }
+    else if (!pSettings->mInput.EnableXInput && (pXInput != nullptr))
+    {
+        bool active = pXInput->GetHookActive();
+        SAFE_DELETE(pXInput);
+        if (active)
+        {
+            m_AshitaCore->GetChatManager()->Writef(0, false, "%s%s", Ashita::Chat::Header("Crossbar").c_str(), Ashita::Chat::Message("Unhooked XInput!").c_str());
+        }
+    }
+
     pInput->LoadConfig(pSettings->mInput);
     pBindings = new CrossbarBindings(m_AshitaCore, mCurrentName, mCurrentId, mCurrentJob, pSettings);
     pCanvas   = new CrossbarCanvas(m_AshitaCore, pSettings, pBindings);

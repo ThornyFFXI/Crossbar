@@ -110,6 +110,8 @@ struct InputConfig_t
     bool AllowDoubleTap;
     bool AllowPriority;
     bool AllowButtonsInMenu;
+    bool EnableXInput;
+    bool EnableDInput;
 
     InputConfig_t()
         : MenuDuration(1200)
@@ -117,6 +119,8 @@ struct InputConfig_t
         , AllowDoubleTap(false)
         , AllowPriority(false)
         , AllowButtonsInMenu(false)
+        , EnableXInput(true)
+        , EnableDInput(true)
     {}
 };
 

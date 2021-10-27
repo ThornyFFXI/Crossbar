@@ -63,6 +63,11 @@ bool CrossbarDirectInput::AttemptHook()
 	pDirectInput->EnumDevices(DI8DEVCLASS_GAMECTRL, DIEnumDevicesCallback, &nJoysticks, DIEDFL_ALLDEVICES);
 	return mHookActive;
 }
+bool CrossbarDirectInput::GetHookActive()
+{
+    return mHookActive;
+}
+
 HRESULT CrossbarDirectInput::GetDeviceState(IDirectInputDevice8A* pDevice, DWORD cbData, LPVOID lpvData)
 {
 	DIDEVICEINSTANCEA info;

@@ -405,7 +405,11 @@ CrossbarSettings::CrossbarSettings(IAshitaCore* pAshitaCore, const char* playerN
 				else if (_stricmp(subNode->name(), "taptimeout") == 0)
 					mInput.TapDuration = atoi(subNode->value());
 				else if (_stricmp(subNode->name(), "menuduration") == 0)
-					mInput.MenuDuration = atoi(subNode->value());
+                    mInput.MenuDuration = atoi(subNode->value());
+                else if (_stricmp(subNode->name(), "enablexinput") == 0)
+                    mInput.EnableXInput = (_stricmp(subNode->value(), "false") != 0);
+                else if (_stricmp(subNode->name(), "enabledinput") == 0)
+                    mInput.EnableDInput = (_stricmp(subNode->value(), "false") != 0);
 				else if (_stricmp(subNode->name(), "mainpanelx") == 0)
 					mConfig.MainPanelX = atoi(subNode->value());
 				else if (_stricmp(subNode->name(), "mainpanely") == 0)
@@ -556,6 +560,14 @@ void CrossbarSettings::WriteDefaultSettings(const char* path)
 		outStream << "    <!--The length of time, in milliseconds, you have to hold L1+L2+R1+R2 to open/close binding menu.-->\n";
 		outStream << "    <menuduration>1200</menuduration>\n";
 		outStream << "    \n";
+
+        outStream << "    <!--If enabled, allows xinput hook to occur.-->\n";
+        outStream << "    <enablexinput>true</enablexinput>\n";
+        outStream << "    \n";
+
+        outStream << "    <!--If enabled, allows directinput hook to occur.-->\n";
+        outStream << "    <enabledinput>true</enabledinput>\n";
+        outStream << "    \n";
 
 
 		outStream << "    <!--Location for single trigger panel.  -1 in x will center.  Negative value in y will leave that value as a gap at bottom.-->\n";

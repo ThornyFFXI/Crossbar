@@ -29,6 +29,10 @@ CrossbarXInput::~CrossbarXInput()
 	}
 }
 
+bool CrossbarXInput::GetHookActive()
+{
+    return mHookActive;
+}
 bool CrossbarXInput::AttemptHook()
 {
 	if (mHookActive)

@@ -47,6 +47,7 @@ public:
     CrossbarDirectInput(InputHandler* pInput);
     ~CrossbarDirectInput();
     bool AttemptHook();
+    bool GetHookActive();
     HRESULT GetDeviceState(IDirectInputDevice8A* pDevice, DWORD cbData, LPVOID lpvData);
     HRESULT GetDeviceData(IDirectInputDevice8A* pDevice, DWORD cbObjectData, LPDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD dwFlags);
 

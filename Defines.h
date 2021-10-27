@@ -56,7 +56,8 @@ enum class MacroMode
 
 #define SAFE_DELETE(a) \
     if (a != NULL)     \
-    delete a
+    delete a;          \
+    a = NULL
 #define SN_TO_INT(a, b)                    \
     if (_stricmp(subNode->name(), a) == 0) \
     b = atoi(subNode->value())
