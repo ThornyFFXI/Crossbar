@@ -396,8 +396,10 @@ void Crossbar::InitializeCrossbar()
     {
         SAFE_DELETE(pDirectInput);
         SAFE_DELETE(pXInput);
-        m_AshitaCore->GetChatManager()->Writef(0, false, "%s%s", Ashita::Chat::Header("Crossbar").c_str(), Ashita::Chat::Error("Failed to load theme.  Crossbar disabled.").c_str());
         SAFE_DELETE(pSettings);
+        SAFE_DELETE(pCanvas);
+        SAFE_DELETE(pMenu);
+        m_AshitaCore->GetChatManager()->Writef(0, false, "%s%s", Ashita::Chat::Header("Crossbar").c_str(), Ashita::Chat::Error("Failed to load theme.  Crossbar disabled.").c_str());
         return;
     }
 
