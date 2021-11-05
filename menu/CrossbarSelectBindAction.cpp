@@ -123,7 +123,7 @@ FontMenuState CrossbarSelectBindAction::GetInitialState(IAshitaCore* pAshitaCore
 	int mainJob = pAshitaCore->GetMemoryManager()->GetPlayer()->GetMainJob();
     int mainJobLevel = pAshitaCore->GetMemoryManager()->GetPlayer()->GetJobLevel(mainJob);
 	int subJob = pAshitaCore->GetMemoryManager()->GetPlayer()->GetSubJob();
-    int subJobLevel  = pAshitaCore->GetMemoryManager()->GetPlayer()->GetJobLevel(subJob);
+    int subJobLevel  = min(mainJobLevel / 2, pAshitaCore->GetMemoryManager()->GetPlayer()->GetJobLevel(subJob));
 
 	if (useSync)
     {

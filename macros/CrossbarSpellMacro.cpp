@@ -1,5 +1,39 @@
 #include "CrossbarSpellMacro.h"
 
+std::vector<int> gAddendumBlack = {
+    253, //Sleep
+    260, //Dispel
+    259, //Sleep II
+    162, //Stone IV
+    172, //Water IV
+    157, //Aero IV
+    147, //Fire IV
+    152, //Blizzard IV
+    167, //Thunder IV
+    163, //Stone V
+    173, //Water V
+    158, //Aero V
+    255, //Break
+    148, //Fire V
+    153, //Blizzard V
+    168  //Thunder V
+};
+std::vector<int> gAddendumWhite = {
+    14,  //Poisona
+    15,  //Paralyna
+    16,  //Blindna
+    17,  //Silena
+    20,  //Cursna
+    143, //Erase
+    135, //Reraise
+    19,  //Viruna
+    18,  //Stona
+    13,  //Raise II
+    141, //Reraise II
+    140, //Raise III
+    142  //Reraise III
+};
+
 CrossbarSpellMacro::CrossbarSpellMacro(IAshitaCore* pAshitaCore, CrossbarSettings* pSettings, SingleMacroInfo_t macroSettings, bool offset, int index)
     : CrossbarMacro(pAshitaCore, pSettings, macroSettings, offset, index)
 {
@@ -181,17 +215,54 @@ bool CrossbarSpellMacro::CheckSpellAvailable()
     if (mainRequired != -1)
     {
         if (mainJobLevel >= mainRequired)
-            return true;
+        {
+            if ((mainJob != 20) || (CheckAddendum(pSpell->Index)))
+            {
+                return true;
+            }
+        }
 
-        if (mainJobLevel == 99)
+        else if (mainJobLevel == 99)
             return true;
     }
 
     int subRequired = pSpell->LevelRequired[subJob];
-    return ((subRequired != -1) && (subJobLevel >= subRequired));
+    if ((subRequired != -1)
+        && (subJobLevel >= subRequired))
+    {
+        return ((subJob != 20) || (CheckAddendum(pSpell->Index)));
+    }
+
+    return false;
+}
+bool CrossbarSpellMacro::CheckAddendum(int spell)
+{
+    if (std::find(gAddendumBlack.begin(), gAddendumBlack.end(), spell) != gAddendumBlack.end())
+    {
+        int16_t* buffs = pAshitaCore->GetMemoryManager()->GetPlayer()->GetBuffs();
+        for (int x = 0; x < 32; x++)
+        {
+            if (buffs[x] == 402)
+                return true;
+        }
+        return false;
+    }
+
+    if (std::find(gAddendumWhite.begin(), gAddendumWhite.end(), spell) != gAddendumWhite.end())
+    {
+        int16_t* buffs = pAshitaCore->GetMemoryManager()->GetPlayer()->GetBuffs();
+        for (int x = 0; x < 32; x++)
+        {
+            if (buffs[x] == 401)
+                return true;
+        }
+        return false;
+    }
+
+    return true;
 }
 void CrossbarSpellMacro::TriggerMacro()
-{
+    {
     mActivationTime = std::chrono::steady_clock::now() + std::chrono::milliseconds(pSettings->mConfig.TriggerDuration);
     if (strcmp(mMacroSettings.IconCommand, "DEFAULT") == 0)
     {

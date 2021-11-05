@@ -23,6 +23,7 @@ public:
     ~CrossbarSpellMacro();
 
     bool CheckSpellAvailable();
+    bool CheckAddendum(int spell);
     bool Draw(GdiDIB* pDIB) override;
     void TriggerMacro() override;
 };
