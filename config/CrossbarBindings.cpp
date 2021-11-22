@@ -395,7 +395,7 @@ SinglePaletteInfo_t::SinglePaletteInfo_t(IAshitaCore* pAshitaCore, CrossbarSetti
 JobSettings_t::JobSettings_t(IAshitaCore* pAshitaCore, int job)
 {
     pJobDefaults = new SingleBindingInfo_t();
-    pJobName = pAshitaCore->GetResourceManager()->GetString("jobs_abbr", job);
+    pJobName = pAshitaCore->GetResourceManager()->GetString("jobs.names_abbr", job);
     mPaletteList.push_back(new SinglePaletteInfo_t());
     sprintf_s(mPaletteList.front()->Name, 256, "%s_1", pJobName);
     mPaletteIterator = mPaletteList.begin();
@@ -403,7 +403,7 @@ JobSettings_t::JobSettings_t(IAshitaCore* pAshitaCore, int job)
 JobSettings_t::JobSettings_t(IAshitaCore* pAshitaCore, CrossbarSettings* pSettings, xml_node<>* baseNode, int job)
 {
     pJobDefaults = new SingleBindingInfo_t();
-    pJobName = pAshitaCore->GetResourceManager()->GetString("jobs_abbr", job);
+    pJobName = pAshitaCore->GetResourceManager()->GetString("jobs.names_abbr", job);
     for (xml_node<>* subNode = baseNode->first_node(); subNode; subNode = subNode->next_sibling())
     {
         if (_stricmp(subNode->name(), "default") == 0)
@@ -491,7 +491,7 @@ void CrossbarBindings::Load(const char* playerName, uint32_t playerId, int playe
         delete[] fileBuffer;
     }
 
-    sprintf_s(path, 256, "%sconfig/crossbar/%s_%u/bindings/%s.xml", pAshitaCore->GetInstallPath(), mPlayerName, mPlayerId, pAshitaCore->GetResourceManager()->GetString("jobs_abbr", mPlayerJob));
+    sprintf_s(path, 256, "%sconfig/crossbar/%s_%u/bindings/%s.xml", pAshitaCore->GetInstallPath(), mPlayerName, mPlayerId, pAshitaCore->GetResourceManager()->GetString("jobs.names_abbr", mPlayerJob));
     if (XmlLoader::Load(&fileBuffer, &xmlBuffer, path))
     {
         xml_node<>* firstNode = xmlBuffer->first_node();
