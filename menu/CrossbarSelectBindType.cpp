@@ -102,6 +102,7 @@ FontMenuState CrossbarSelectBindType::GetInitialState(IAshitaCore* pAshitaCore, 
     }
 
 	std::map<int, std::string> mSkillNames = {
+        {0, "Trust Magic"},
 		{32, "Divine Magic"},
 		{33, "Healing Magic"},
 		{34, "Enhancing Magic"},
