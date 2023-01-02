@@ -136,6 +136,7 @@ struct CrossbarConfig_t
     bool EnableSkillchainAnimation;
     bool EnableTrigger;
     bool HideEmptyIcons;
+    bool HideUntilTrigger;
 
     int FadeAlpha;
     int TriggerDuration;
@@ -165,6 +166,7 @@ struct CrossbarConfig_t
         , EnableTrigger(true)
         , FadeAlpha(140)
         , HideEmptyIcons(false)
+        , HideUntilTrigger(false)
         , TriggerDuration(400)
         , UsePlaystationConfirm(false)
         , MainPanelX(-1)

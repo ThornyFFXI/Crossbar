@@ -10,12 +10,14 @@ DWORD __stdcall Mine_XInputGetState(DWORD dwUserIndex, XINPUT_STATE* pState)
 	return gpXInput->XInputGetState(dwUserIndex, pState);
 }
 
-CrossbarXInput::CrossbarXInput(InputHandler* pInput)
+CrossbarXInput::CrossbarXInput(InputHandler* pInput, IAshitaCore* pAshitaCore)
 	: pInput(pInput)
+    , pAshitaCore(pAshitaCore)
 {
 	gpXInput = this;
 	Real_XInputGetState = nullptr;
-	mHookActive = false;
+    mHookActive         = false;
+    mRateLimit          = std::chrono::steady_clock::now();
 }
 
 CrossbarXInput::~CrossbarXInput()
@@ -35,46 +37,35 @@ bool CrossbarXInput::GetHookActive()
 }
 bool CrossbarXInput::AttemptHook()
 {
-	if (mHookActive)
-		return false;
+    if ((mHookActive) || (std::chrono::steady_clock::now() < mRateLimit))
+        return false;
 
-	HMODULE hMods[1024];
-	HANDLE hProcess;
-	DWORD cbNeeded;
-	unsigned int i;
+    auto handle = ::GetModuleHandleA("xinput1_3.dll");
+    if (handle == nullptr)
+    {
+        handle = ::LoadLibraryA("xinput1_3.dll");
+    }
+    if (handle != nullptr)
+    {
+        const auto address = ::GetProcAddress(handle, "XInputGetState");
+        if (address != nullptr)
+        {
 
-	hProcess = OpenProcess(PROCESS_QUERY_INFORMATION |
-		PROCESS_VM_READ,
-		FALSE, GetCurrentProcessId());
-	if (NULL == hProcess)
-		return 1;
+            Real_XInputGetState = reinterpret_cast<XInputGetStateFunc>(address);
 
-	if (EnumProcessModules(hProcess, hMods, sizeof(hMods), &cbNeeded))
-	{
-		for (i = 0; i < (cbNeeded / sizeof(HMODULE)); i++)
-		{
-			TCHAR szModName[MAX_PATH];
-			if (GetModuleFileNameEx(hProcess, hMods[i], szModName, sizeof(szModName) / sizeof(TCHAR)))
-			{
-				FARPROC address = GetProcAddress(hMods[i], "XInputGetState");
-				if ((strstr(szModName, "XINPUT1_3.dll")) && (address))
-				{
-					Real_XInputGetState = (XInputGetStateFunc)address;
-					::DetourTransactionBegin();
-					::DetourUpdateThread(::GetCurrentThread());
-					uint32_t result = ::DetourAttach(&(PVOID&)Real_XInputGetState, Mine_XInputGetState);
-					uint32_t result2 = ::DetourTransactionCommit();
-					if ((result == 0) && (result2 == 0))
-					{
-						mHookActive = true;
-						break;
-					}
-				}
-			}
-		}
-	}
-	CloseHandle(hProcess);
-	return mHookActive;
+            ::DetourTransactionBegin();
+            ::DetourUpdateThread(::GetCurrentThread());
+            ::DetourAttach(&(PVOID&)Real_XInputGetState, Mine_XInputGetState);
+            if (::DetourTransactionCommit() == NO_ERROR)
+                mHookActive = true;
+        }
+    }
+    mRateLimit = std::chrono::steady_clock::now() + std::chrono::seconds(5);
+    if (!mHookActive)
+    {
+        pAshitaCore->GetChatManager()->Writef(0, false, "%s%s", Ashita::Chat::Header("Crossbar").c_str(), Ashita::Chat::Error("Failed to hook xinput.  If you are not using an xinput controller, please disable in config and reload crossbar.").c_str());
+    }
+    return mHookActive;
 }
 DWORD CrossbarXInput::XInputGetState(DWORD dwUserIndex, XINPUT_STATE* pState)
 {

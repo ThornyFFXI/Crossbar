@@ -15,6 +15,7 @@ typedef HRESULT (WINAPI* DIGetDeviceData)(IDirectInputDevice8A*, DWORD, LPDIDEVI
 class CrossbarDirectInput
 {
 private:
+    IAshitaCore* pAshitaCore;
     IDirectInput8A* pDirectInput;
     LPDIRECTINPUTDEVICE8 pDirectInputDevice;
     DIGetDeviceState Real_GetDeviceState;
@@ -22,6 +23,7 @@ private:
     bool mHookActive;
     InputHandler* pInput;
     DWORD pvTable;
+    std::chrono::steady_clock::time_point mRateLimit;
 
     std::list<int> mAlwaysBlockOffsets =
     {
@@ -44,7 +46,7 @@ private:
     bool mTriggers[2];
 
 public:
-    CrossbarDirectInput(InputHandler* pInput);
+    CrossbarDirectInput(InputHandler* pInput, IAshitaCore* pAshitaCore);
     ~CrossbarDirectInput();
     bool AttemptHook();
     bool GetHookActive();

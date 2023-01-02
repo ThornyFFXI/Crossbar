@@ -26,6 +26,7 @@ bool Crossbar::Initialize(IAshitaCore* core, ILogManager* logger, const uint32_t
     Gdiplus::GdiplusStartup(&mGDIToken, &gdiplusStartupInput, NULL);
     pInput                                = new InputHandler(this);
     CrossbarWeaponskillMacro::pResonation = new ResonationTracker(m_AshitaCore);
+    mCurrentMode                          = MacroMode::NoTrigger;
     pDirectInput                          = NULL;
     pXInput                               = NULL;
     pMenu                                 = NULL;
@@ -39,6 +40,9 @@ bool Crossbar::Initialize(IAshitaCore* core, ILogManager* logger, const uint32_t
     CrossbarItemMacro::pRealTime = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "8B0D????????8B410C8B49108D04808D04808D04808D04C1C3", 2, 0);
     pGameMenu                    = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "8B480C85C974??8B510885D274??3B05", 16, 0);
     pMenuHelp                    = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "5350E8????????5F885D??5E5D5BC3A1????????85C0????538BCDE8", 16, 0);
+    //Credit to Velyn for sharing these 2 signatures
+    pEventSystem         = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "A0????????84C0741AA1????????85C0741166A1????????663B05????????0F94C0C3", 0, 0);
+    pUserInterfaceHidden = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "8B4424046A016A0050B9????????E8????????F6D81BC040C3", 0, 0);
 
     if (m_AshitaCore->GetMemoryManager()->GetParty()->GetMemberIsActive(0))
     {
@@ -183,38 +187,7 @@ void Crossbar::Direct3DPresent(const RECT* pSourceRect, const RECT* pDestRect, H
         }
     }
 
-    bool hide   = false;
-    int myIndex = m_AshitaCore->GetMemoryManager()->GetParty()->GetMemberTargetIndex(0);
-    if ((mZoning) || (myIndex < 1) || (m_AshitaCore->GetMemoryManager()->GetEntity()->GetRawEntity(myIndex) == 0))
-    {
-        if (pSettings->mConfig.HideWhileZoning)
-        {
-            hide = true;
-        }
-    }
-    else if ((pSettings->mConfig.HideWhileCutscene) && (m_AshitaCore->GetMemoryManager()->GetEntity()->GetStatus(myIndex) == 4))
-    {
-        hide = true;
-    }
-    if ((pSettings->mConfig.HideWhileMap) && (GetMenuName().find("map") != std::string::npos))
-    {
-        hide = true;
-    }
-
-    if (hide)
-    {
-        if (pCanvas)
-        {
-            pCanvas->Hide();
-        }
-
-        if (pMenu)
-        {
-            pMenu->Hide();
-        }
-        return;
-    }
-
+    auto hide = CheckHide();
     if (pMenu)
     {
         FontMenuCompletionData_t data;
@@ -223,6 +196,10 @@ void Crossbar::Direct3DPresent(const RECT* pSourceRect, const RECT* pDestRect, H
             delete pMenu;
             pMenu = 0;
         }
+        else if (hide)
+        {
+            pMenu->Hide();
+        }
         else
         {
             pMenu->Draw();
@@ -230,6 +207,15 @@ void Crossbar::Direct3DPresent(const RECT* pSourceRect, const RECT* pDestRect, H
     }
     if (pCanvas)
     {
+        if ((pSettings->mConfig.HideUntilTrigger) && (mCurrentMode == MacroMode::NoTrigger))
+            hide = true;
+
+        if (hide)
+        {
+            pCanvas->Hide();
+            return;
+        }
+
         MacroMode drawMode = mCurrentMode;
         if (pMenu)
         {
@@ -405,7 +391,7 @@ void Crossbar::InitializeCrossbar()
 
     if (pSettings->mInput.EnableDInput && (pDirectInput == nullptr))
     {
-        pDirectInput = new CrossbarDirectInput(pInput);
+        pDirectInput = new CrossbarDirectInput(pInput, m_AshitaCore);
     }
     else if (!pSettings->mInput.EnableDInput && (pDirectInput != nullptr))
     {
@@ -419,7 +405,7 @@ void Crossbar::InitializeCrossbar()
 
     if (pSettings->mInput.EnableXInput && (pXInput == nullptr))
     {
-        pXInput = new CrossbarXInput(pInput);
+        pXInput = new CrossbarXInput(pInput, m_AshitaCore);
     }
     else if (!pSettings->mInput.EnableXInput && (pXInput != nullptr))
     {
@@ -434,4 +420,46 @@ void Crossbar::InitializeCrossbar()
     pInput->LoadConfig(pSettings->mInput);
     pBindings = new CrossbarBindings(m_AshitaCore, mCurrentName, mCurrentId, mCurrentJob, pSettings);
     pCanvas   = new CrossbarCanvas(m_AshitaCore, pSettings, pBindings);
+}
+
+bool Crossbar::GetInterfaceHidden()
+{
+    if (pUserInterfaceHidden == 0)
+        return false;
+    auto ptr = Read32(pUserInterfaceHidden, 10);
+    if (ptr == 0)
+        return false;
+
+    return (Read8(ptr, 0xB4) == 1);
+}
+bool Crossbar::GetEventActive()
+{
+    if (pEventSystem == 0)
+        return false;
+    auto ptr = Read32(pEventSystem, 1);
+    if (ptr == 0)
+        return false;
+
+    return (Read8(ptr, 0) == 1);
+}
+bool Crossbar::CheckHide()
+{
+    if (GetInterfaceHidden())
+        return true;
+
+    if (pSettings->mConfig.HideWhileZoning)
+    {
+        int myIndex = m_AshitaCore->GetMemoryManager()->GetParty()->GetMemberTargetIndex(0);
+        if ((mZoning) || (myIndex < 1) || (m_AshitaCore->GetMemoryManager()->GetEntity()->GetRawEntity(myIndex) == 0))
+        {
+            return true;
+        }
+    }
+    if ((pSettings->mConfig.HideWhileCutscene) && (GetEventActive()))
+        return true;
+
+    if ((pSettings->mConfig.HideWhileMap) && (GetMenuName().find("map") != std::string::npos))
+        return true;
+
+    return false;
 }

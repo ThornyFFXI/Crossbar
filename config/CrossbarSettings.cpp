@@ -454,6 +454,8 @@ CrossbarSettings::CrossbarSettings(IAshitaCore* pAshitaCore, const char* playerN
                     mConfig.HideWhileCutscene = (_stricmp(subNode->value(), "false") != 0);
                 else if (_stricmp(subNode->name(), "hidewhilemap") == 0)
                     mConfig.HideWhileMap = (_stricmp(subNode->value(), "false") != 0);
+                else if (_stricmp(subNode->name(), "hideuntiltrigger") == 0)
+                    mConfig.HideUntilTrigger = (_stricmp(subNode->value(), "false") != 0);
 			}
 		}
 		delete xmlBuffer;
@@ -618,6 +620,9 @@ void CrossbarSettings::WriteDefaultSettings(const char* path)
         outStream << "    \n";
         outStream << "    <!--If enabled, will hide crossbar while in map.-->\n";
         outStream << "    <hidewhilemap>true</hidewhilemap>\n";
+        outStream << "    \n";
+        outStream << "    <!--If enabled, will hide crossbar anytime a trigger isn't depressed.-->\n";
+        outStream << "    <hideuntiltrigger>false</hideuntiltrigger>\n";
 		outStream << "</crossbarsettings>";
 		outStream.close();
 	}

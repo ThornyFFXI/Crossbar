@@ -16,12 +16,14 @@ HRESULT __stdcall Mine_GetDeviceData(IDirectInputDevice8A* pDevice, DWORD cbObje
 	return gpDirectInput->GetDeviceData(pDevice, cbObjectData, rgdod, pdwInOut, dwFlags);
 }
 
-CrossbarDirectInput::CrossbarDirectInput(InputHandler* pInput)
-	: pInput(pInput)
+CrossbarDirectInput::CrossbarDirectInput(InputHandler* pInput, IAshitaCore* pAshitaCore)
+	: pAshitaCore(pAshitaCore)
+	, pInput(pInput)
 {
 	gpDirectInput = this;
 	Real_GetDeviceState = nullptr;
 	mHookActive = false;
+    mRateLimit          = std::chrono::steady_clock::now();
 	mTriggers[0] = false;
 	mTriggers[1] = false;
 	DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION, IID_IDirectInput8, (LPVOID*)&pDirectInput, NULL);
@@ -56,11 +58,16 @@ CrossbarDirectInput::~CrossbarDirectInput()
 
 bool CrossbarDirectInput::AttemptHook()
 {
-	if (mHookActive)
+    if ((mHookActive) || (std::chrono::steady_clock::now() < mRateLimit))
 		return false;
 	
 	int nJoysticks = 0;
 	pDirectInput->EnumDevices(DI8DEVCLASS_GAMECTRL, DIEnumDevicesCallback, &nJoysticks, DIEDFL_ALLDEVICES);
+    mRateLimit = std::chrono::steady_clock::now() + std::chrono::seconds(5);
+	if (!mHookActive)
+	{
+        pAshitaCore->GetChatManager()->Writef(0, false, "%s%s", Ashita::Chat::Header("Crossbar").c_str(), Ashita::Chat::Error("Failed to hook directinput.  If you are not using a directinput controller, please disable in config and reload crossbar.").c_str());
+	}
 	return mHookActive;
 }
 bool CrossbarDirectInput::GetHookActive()

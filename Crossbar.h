@@ -36,6 +36,8 @@ private:
     bool mZoning;
     DWORD pGameMenu;
     DWORD pMenuHelp;
+    DWORD pEventSystem;
+    DWORD pUserInterfaceHidden;
 
 public:
     const char* GetName(void) const override
@@ -56,7 +58,7 @@ public:
     }
     double GetVersion(void) const override
     {
-        return 1.20f;
+        return 1.21f;
     }
     int32_t GetPriority(void) const override
     {
@@ -70,8 +72,11 @@ public:
     bool Initialize(IAshitaCore* core, ILogManager* logger, const uint32_t id) override;
     void Release(void) override;
 
+    bool CheckHide();
     bool GetMenuActive();
     bool GetGameMenuActive();
+    bool GetInterfaceHidden();
+    bool GetEventActive();
     std::string GetMenuName();
     std::string GetMenuHelpText();
     void HandleButtonPress(MacroButton button);
