@@ -172,21 +172,6 @@ void Crossbar::Direct3DPresent(const RECT* pSourceRect, const RECT* pDestRect, H
     if (pSettings == nullptr)
         return;
 
-    if (pDirectInput)
-    {
-        if (pDirectInput->AttemptHook())
-        {
-            m_AshitaCore->GetChatManager()->Writef(0, false, "%s%s", Ashita::Chat::Header("Crossbar").c_str(), Ashita::Chat::Message("Hooked DirectInput!").c_str());
-        }
-    }
-    if (pXInput)
-    {
-        if (pXInput->AttemptHook())
-        {
-            m_AshitaCore->GetChatManager()->Writef(0, false, "%s%s", Ashita::Chat::Header("Crossbar").c_str(), Ashita::Chat::Message("Hooked XInput!").c_str());
-        }
-    }
-
     auto hide = CheckHide();
     if (pMenu)
     {

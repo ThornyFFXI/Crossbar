@@ -6,24 +6,19 @@
 #include "../thirdparty/detours/detours.h"
 #pragma comment(lib, "thirdparty/detours/detours.lib")
 
-typedef DWORD /**/(WINAPI* XInputGetStateFunc)(DWORD, XINPUT_STATE*);
-
 class CrossbarXInput
 {
 private:
     IAshitaCore* pAshitaCore;
-    XInputGetStateFunc Real_XInputGetState;
     bool mHookActive;
     InputHandler* pInput;
     bool mTriggers[2];
     WORD mMacroBlockMask = ~(XINPUT_GAMEPAD_DPAD_UP | XINPUT_GAMEPAD_DPAD_RIGHT | XINPUT_GAMEPAD_DPAD_DOWN | XINPUT_GAMEPAD_DPAD_LEFT | XINPUT_GAMEPAD_Y | XINPUT_GAMEPAD_B | XINPUT_GAMEPAD_A | XINPUT_GAMEPAD_X | XINPUT_GAMEPAD_LEFT_SHOULDER | XINPUT_GAMEPAD_RIGHT_SHOULDER);
-    std::chrono::steady_clock::time_point mRateLimit;
 
 public:
     CrossbarXInput(InputHandler* pInput, IAshitaCore* pAshitaCore);
     ~CrossbarXInput();
     bool GetHookActive();
-    bool AttemptHook();
     DWORD XInputGetState(DWORD dwUserIndex, XINPUT_STATE* pState);
     void HandleState(DWORD dwUserIndex, XINPUT_STATE* pState);
     void UpdateState(DWORD dwUserIndex, XINPUT_STATE* pState);

@@ -16,14 +16,8 @@ class CrossbarDirectInput
 {
 private:
     IAshitaCore* pAshitaCore;
-    IDirectInput8A* pDirectInput;
-    LPDIRECTINPUTDEVICE8 pDirectInputDevice;
-    DIGetDeviceState Real_GetDeviceState;
-    DIGetDeviceData Real_GetDeviceData;
     bool mHookActive;
     InputHandler* pInput;
-    DWORD pvTable;
-    std::chrono::steady_clock::time_point mRateLimit;
 
     std::list<int> mAlwaysBlockOffsets =
     {
@@ -48,17 +42,13 @@ private:
 public:
     CrossbarDirectInput(InputHandler* pInput, IAshitaCore* pAshitaCore);
     ~CrossbarDirectInput();
-    bool AttemptHook();
     bool GetHookActive();
-    HRESULT GetDeviceState(IDirectInputDevice8A* pDevice, DWORD cbData, LPVOID lpvData);
-    HRESULT GetDeviceData(IDirectInputDevice8A* pDevice, DWORD cbObjectData, LPDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD dwFlags);
+    HRESULT GetDeviceState(DWORD cbData, LPVOID lpvData);
+    HRESULT GetDeviceData(DWORD cbObjectData, LPDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD dwFlags);
 
-    void HandleFoundDevice(GUID guid);
     void HandleState(DIJOYSTATE* pState);
-    void HandleStateExtended(DIJOYSTATE2* pState);
-    void UpdateData(IDirectInputDevice8A* pDevice, DWORD cbObjectData, LPDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD dwFlags);
-    void UpdateState(IDirectInputDevice8A* pDevice, DWORD cbData, LPVOID lpvData);
-    void UpdateStateExtended(IDirectInputDevice8A* pDevice, DWORD cbData, LPVOID lpvData);
+    void UpdateData(DWORD cbObjectData, LPDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD dwFlags);
+    void UpdateState(DWORD cbData, LPVOID lpvData);
 };
 
 #endif

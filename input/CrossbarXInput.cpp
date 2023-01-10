@@ -15,68 +15,37 @@ CrossbarXInput::CrossbarXInput(InputHandler* pInput, IAshitaCore* pAshitaCore)
     , pAshitaCore(pAshitaCore)
 {
 	gpXInput = this;
-	Real_XInputGetState = nullptr;
     mHookActive         = false;
-    mRateLimit          = std::chrono::steady_clock::now();
+    pAshitaCore->GetInputManager()->GetXInput()->AddCallback("Crossbar_Plugin_CB", &Mine_XInputGetState, nullptr);
 }
 
 CrossbarXInput::~CrossbarXInput()
 {
-	if (mHookActive)
-	{
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
-		DetourDetach(&(LPVOID&)Real_XInputGetState, Mine_XInputGetState);
-		DetourTransactionCommit();
-	}
+    pAshitaCore->GetInputManager()->GetXInput()->RemoveCallback("Crossbar_Plugin_CB");
 }
 
 bool CrossbarXInput::GetHookActive()
 {
     return mHookActive;
 }
-bool CrossbarXInput::AttemptHook()
-{
-    if ((mHookActive) || (std::chrono::steady_clock::now() < mRateLimit))
-        return false;
 
-    auto handle = ::GetModuleHandleA("xinput1_3.dll");
-    if (handle == nullptr)
-    {
-        handle = ::LoadLibraryA("xinput1_3.dll");
-    }
-    if (handle != nullptr)
-    {
-        const auto address = ::GetProcAddress(handle, "XInputGetState");
-        if (address != nullptr)
-        {
-
-            Real_XInputGetState = reinterpret_cast<XInputGetStateFunc>(address);
-
-            ::DetourTransactionBegin();
-            ::DetourUpdateThread(::GetCurrentThread());
-            ::DetourAttach(&(PVOID&)Real_XInputGetState, Mine_XInputGetState);
-            if (::DetourTransactionCommit() == NO_ERROR)
-                mHookActive = true;
-        }
-    }
-    mRateLimit = std::chrono::steady_clock::now() + std::chrono::seconds(5);
-    if (!mHookActive)
-    {
-        pAshitaCore->GetChatManager()->Writef(0, false, "%s%s", Ashita::Chat::Header("Crossbar").c_str(), Ashita::Chat::Error("Failed to hook xinput.  If you are not using an xinput controller, please disable in config and reload crossbar.").c_str());
-    }
-    return mHookActive;
-}
 DWORD CrossbarXInput::XInputGetState(DWORD dwUserIndex, XINPUT_STATE* pState)
 {
-	DWORD retValue = Real_XInputGetState(dwUserIndex, pState);
-    if (pInput->GetGameMenuActive())
-        return retValue;
+    if (!mHookActive)
+    {
+        mHookActive = true;
+        pAshitaCore->GetChatManager()->Writef(0, false, "%s%s", Ashita::Chat::Header("Crossbar").c_str(), Ashita::Chat::Message("XInput detected!").c_str());
+    }
 
-	HandleState(dwUserIndex, pState);
-	UpdateState(dwUserIndex, pState);
-	return retValue;
+    if (!pInput->GetGameMenuActive())
+    {
+        HandleState(dwUserIndex, pState);
+        UpdateState(dwUserIndex, pState);
+    }
+
+	return ERROR_SUCCESS;
 }
+
 void CrossbarXInput::HandleState(DWORD dwUserIndex, XINPUT_STATE* pState)
 {
 	InputData_t data;
@@ -94,6 +63,7 @@ void CrossbarXInput::HandleState(DWORD dwUserIndex, XINPUT_STATE* pState)
 	data.Dpad[3] = (pState->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT);
 	pInput->HandleState(data);
 }
+
 void CrossbarXInput::UpdateState(DWORD dwUserIndex, XINPUT_STATE* pState)
 {
 	if ((pState->Gamepad.bLeftTrigger) || (pState->Gamepad.bRightTrigger) || (pInput->GetMenuActive()))
