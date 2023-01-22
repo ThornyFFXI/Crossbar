@@ -3,29 +3,6 @@
 #include "../Crossbar.h"
 #include "../config/CrossbarSettings.h"
 
-struct InputData_t
-{
-    bool LeftTrigger;
-    bool RightTrigger;
-    bool LeftShoulder;
-    bool RightShoulder;
-    bool Dpad[4];
-    bool Buttons[4];
-
-    InputData_t()
-        : LeftTrigger(false)
-        , RightTrigger(false)
-        , LeftShoulder(false)
-        , RightShoulder(false)
-    {
-        for (int x = 0; x < 4; x++)
-        {
-            Dpad[x] = false;
-            Buttons[x] = false;
-        }
-    }
-};
-
 enum class MenuComboState
 {
     Inactive = 0,
