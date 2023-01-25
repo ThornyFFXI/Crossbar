@@ -86,7 +86,7 @@ BOOL CrossbarDirectInput::ControllerCallback(uint32_t* offset, int32_t* state, b
     if (std::find(mAlwaysBlockOffsets.begin(), mAlwaysBlockOffsets.end(), *offset) != mAlwaysBlockOffsets.end())
         return true;
 
-    if ((m_ControllerState.LeftTrigger) || (m_ControllerState.RightTrigger))
+    if ((m_ControllerState.LeftTrigger) || (m_ControllerState.RightTrigger) || (pInput->GetMenuActive()))
         return (std::find(mMacroBlockOffsets.begin(), mMacroBlockOffsets.end(), *offset) != mMacroBlockOffsets.end());
 
     return false;
