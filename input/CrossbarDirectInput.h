@@ -3,6 +3,8 @@
 #include "InputHandler.h"
 #include <list>
 
+//#define NINTENDOSWITCH
+
 class CrossbarDirectInput
 {
 private:
@@ -11,14 +13,19 @@ private:
     bool mHookActive;
     InputData_t m_ControllerState;
 
+    #ifdef NINTENDOSWITCH
     std::list<uint32_t> mAlwaysBlockOffsets =
     {
-        12, //L2 Axis
-        16, //R2 Axis
         offsetof(DIJOYSTATE, rgbButtons) + 6,
-        offsetof(DIJOYSTATE, rgbButtons) + 7
+        offsetof(DIJOYSTATE, rgbButtons) + 7,
     };
-
+    #else
+    std::list<uint32_t> mAlwaysBlockOffsets = {
+            12, //L2 Axis
+            16, //R2 Axis
+            offsetof(DIJOYSTATE, rgbButtons) + 6,
+            offsetof(DIJOYSTATE, rgbButtons) + 7};
+    #endif
     std::list<uint32_t> mMacroBlockOffsets = {
         offsetof(DIJOYSTATE, rgbButtons) + 0,
         offsetof(DIJOYSTATE, rgbButtons) + 1,
@@ -26,8 +33,7 @@ private:
         offsetof(DIJOYSTATE, rgbButtons) + 3,
         offsetof(DIJOYSTATE, rgbButtons) + 4,
         offsetof(DIJOYSTATE, rgbButtons) + 5,
-        offsetof(DIJOYSTATE, rgdwPOV)
-    };
+        offsetof(DIJOYSTATE, rgdwPOV)};
 
 public:
     CrossbarDirectInput(InputHandler* pInput, IAshitaCore* pAshitaCore);
