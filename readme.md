@@ -1,3 +1,6 @@
+# WARNING - Deprecated
+While this will remain available for users of Ashita pre-4.15, or those who are curious, it has been deprecated.  Users of current Ashita should look at https://github.com/ThornyFFXI/tCrossBar instead.
+
 # Crossbar
 Crossbar is a plugin based on the XIVCrossbar addon by Aliekber(and thus, based on FFXIV's crossbar).  It provides the ability to trigger macros with a controller effectively.  Crossbar handles all of the controller hooks internally and should work with directinput and xinput controllers with no special setup.
 
