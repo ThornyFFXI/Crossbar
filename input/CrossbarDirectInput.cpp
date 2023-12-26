@@ -7,7 +7,7 @@ BOOL __stdcall gControllerCallback(uint32_t* offset, int32_t* state, bool blocke
     return gpDirectInput->ControllerCallback(offset, state, blocked, injected);
 }
 
-HRESULT __stdcall Mine_GetDeviceState(DWORD cbData, LPVOID lpvData)
+HRESULT __stdcall Mine_GetDeviceState(LPDIRECTINPUTDEVICE8A device, DWORD cbData, LPVOID lpvData)
 {
     return gpDirectInput->GetDeviceState(cbData, lpvData);
 }
